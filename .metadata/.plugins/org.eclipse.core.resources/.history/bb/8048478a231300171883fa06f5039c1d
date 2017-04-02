@@ -1,0 +1,163 @@
+import java.util.Iterator;
+
+import jade.content.lang.Codec.*;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.*;
+import jade.content.onto.annotations.*;
+import jade.content.onto.basic.*;
+import jade.content.onto.basic.Result;
+import jade.core.*;
+import jade.core.behaviours.*;
+import jade.core.messaging.*;
+import jade.domain.*;
+import jade.domain.JADEAgentManagement.*;
+import jade.domain.mobility.*;
+import jade.lang.acl.*;
+import jade.util.leap.Serializable;
+import jade.wrapper.ControllerException;
+
+public class TruckAgent3 extends Agent {
+
+	public static final long serialVersionUID = 1L;
+	transient public AID workTopic;
+	transient public MessageTemplate managerTemplate;
+	transient public MessageTemplate amsTemplate;
+
+	protected void setup(){
+		
+		// register the SL0 content language
+		getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0 );
+		// register the mobility ontology
+		getContentManager() .registerOntology(MobilityOntology.getInstance());
+		
+		try {
+			System.out.println(getAID().getName() +": My location is: " + getContainerController().getContainerName());
+		} catch (ControllerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+			
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(getAMS());
+		request.setLanguage(FIPANames.ContentLanguage.FIPA_SL0);
+		request.setOntology(MobilityOntology.NAME);
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+			
+		// creates the content of the ACLMessage
+		Action act =new Action();
+		act.setActor(getAMS());
+		WhereIsAgentAction action =new WhereIsAgentAction();
+		action.setAgentIdentifier(getAMS());
+		act.setAction(action);
+		try{
+				getContentManager().fillContent(request, act);
+		} 
+		catch(CodecException e) {e.printStackTrace();return;} 
+		catch(OntologyException e) {e.printStackTrace();return;}
+		send(request);
+
+
+		ACLMessage rcv=null;
+		while(rcv==null){
+			rcv=receive();
+		}
+		Result results = null;
+		try{
+			results = (Result)getContentManager().extractContent(rcv);
+		} 
+		catch(UngroundedException e) {e.printStackTrace();return;} 
+		catch(CodecException e) {e.printStackTrace();return;} 
+		catch(OntologyException e) {e.printStackTrace();return;}
+		Iterator it = results.getItems().iterator();
+		Location loc = null;
+		if(it.hasNext()){
+			loc = (Location) it.next();
+		}
+		doMove(loc);
+		System.out.println(getAID().getName() +": My new location will be "+loc.getName());
+		
+		
+//		try {
+//			TopicManagementHelper topicHelper = (TopicManagementHelper)getHelper(TopicManagementHelper.SERVICE_NAME);
+//			workTopic = topicHelper.createTopic("Work");
+//			topicHelper.register(workTopic);
+//			managerTemplate = MessageTemplate.MatchTopic(workTopic);
+//			amsTemplate=MessageTemplate.MatchSender(getAMS());
+//		} catch (ServiceException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+//
+//		Behaviour b = new CyclicBehaviour(this) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			public void action() {		
+//				ACLMessage rcv = receive(managerTemplate);
+//				if(rcv !=null) {
+//					System.out.println(getAID().getName() +": Work message has been received.");
+//					try {
+//						System.out.println(getAID().getName() +": My location is: " + getContainerController().getContainerName());
+//					} catch (ControllerException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//					ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+//					request.addReceiver(getAMS());
+//					request.setLanguage(FIPANames.ContentLanguage.FIPA_SL0);
+//					request.setOntology(MobilityOntology.NAME);
+//					request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+//					
+//					// creates the content of the ACLMessage
+//					Action act =new Action();
+//					act.setActor(getAMS());
+//					WhereIsAgentAction action =new WhereIsAgentAction();
+//					action.setAgentIdentifier(rcv.getSender());
+//					act.setAction(action);
+//					try{
+//							getContentManager().fillContent(request, act);
+//					} 
+//					catch(CodecException e) {e.printStackTrace();return;} 
+//					catch(OntologyException e) {e.printStackTrace();return;}
+//					send(request);
+//				} 
+//				else{
+//					rcv=receive(amsTemplate);
+//					if(rcv !=null) {
+//						Result results = null;
+//						try{
+//						results = (Result)getContentManager().extractContent(rcv);
+//						} 
+//						catch(UngroundedException e) {e.printStackTrace();return;} 
+//						catch(CodecException e) {e.printStackTrace();return;} 
+//						catch(OntologyException e) {e.printStackTrace();return;}
+//						Iterator it = results.getItems().iterator();
+//						Location loc = null;
+//						if(it.hasNext()){
+//							loc = (Location) it.next();
+//						}
+//						doMove(loc);
+//						System.out.println(getAID().getName() +": My new location will be "+loc.getName());
+//
+//					}
+//					else {
+//					block();
+//					}
+//				}
+//			}
+//		};
+//		addBehaviour(b);
+	}
+	
+	protected void beforeMove(){
+		System.out.println(getAID().getName() +": My new location will be ");
+	}
+	protected void afterMove(){
+		System.out.println(getAID().getName() +": My new location will be ");
+	}
+	
+	protected void takeDown(){
+		super.takeDown();
+	}
+}

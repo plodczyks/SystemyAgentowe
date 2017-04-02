@@ -1,0 +1,64 @@
+import jade.core.*;
+import jade.core.behaviours.*;
+import jade.core.messaging.*;
+import jade.lang.acl.*;
+
+public class MCAAgent extends Agent {
+
+	private static final long serialVersionUID = 1L;
+	
+	private MessageTemplate saTemplate;
+
+	private AID mcaTopic;
+	
+	private int messageCount;
+	
+	protected void setup(){
+		
+		Object[] args=getArguments();
+		messageCount= Integer.parseInt((String)(args[0]));
+
+		try {
+			TopicManagementHelper topicHelper = (TopicManagementHelper)getHelper(TopicManagementHelper.SERVICE_NAME);
+			AID saTopic = topicHelper.createTopic("SA");
+			topicHelper.register(saTopic);
+			saTemplate = MessageTemplate.MatchTopic(saTopic);
+			
+			mcaTopic=topicHelper.createTopic("MCA");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		addBehaviour(new CyclicBehaviour(this) {
+
+			private static final long serialVersionUID = 1L;
+
+			private int receivedSACount=0;
+			
+			@Override
+			public void action() {
+				ACLMessage rcv = receive(saTemplate);
+				if(rcv !=null) {
+					receivedSACount++;
+					System.out.println(getAID().getName() +": Spam message was handled. ");
+					if(receivedSACount==messageCount){
+						ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+						msg.setContent("");
+						msg.addReceiver(mcaTopic);
+						System.out.println(getAID().getName() +": Spam message was sended.");
+						send(msg);
+					}
+					removeBehaviour(this);					
+				}
+				else {
+					block();
+				}
+			}
+		});
+	}
+	
+	protected void takeDown(){
+		super.takeDown();
+	}
+}

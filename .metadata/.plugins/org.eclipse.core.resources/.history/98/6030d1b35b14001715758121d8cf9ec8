@@ -1,0 +1,62 @@
+import java.util.Date;
+
+import jade.core.*;
+import jade.core.behaviours.*;
+import jade.core.messaging.*;
+import jade.lang.acl.*;
+
+public class SAAgent extends Agent {
+
+	private static final long serialVersionUID = 1L;
+	private AID emaTopic;
+	private MessageTemplate emaTemplate;
+//	private AID spamTopic;
+	
+	protected void setup(){
+		try {
+			TopicManagementHelper topicHelper = (TopicManagementHelper)getHelper(TopicManagementHelper.SERVICE_NAME);
+			emaTopic = topicHelper.createTopic("EMA");
+			topicHelper.register(emaTopic);
+			emaTemplate = MessageTemplate.MatchTopic(emaTopic);
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		addBehaviour(new CyclicBehaviour(this) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void action() {
+				ACLMessage rcv = receive(emaTemplate);
+				if(rcv !=null) {
+					removeBehaviour(this);
+					System.out.println(getAID().getName() +": Spamming is starting. ");
+				}
+				else {
+					block();
+				}
+			}
+		});
+		
+		Behaviour b = new TickerBehaviour(this,60000) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onTick() {
+				ACLMessage msg = new ACLMessage(ACLMessage.QUERY_IF);
+				msg.setContent("I have work to do");
+				msg.addReceiver(workTopic);
+				System.out.println(getAID().getName() +": Work message is sending.");
+				send(msg);
+			}
+		};
+		addBehaviour(b);
+	}
+	
+	protected void takeDown(){
+		super.takeDown();
+	}
+}

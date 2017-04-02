@@ -1,0 +1,72 @@
+import java.util.Date;
+import jade.core.*;
+import jade.core.behaviours.*;
+import jade.core.messaging.*;
+import jade.lang.acl.*;
+
+public class EMAAgent extends Agent {
+
+	private static final long serialVersionUID = 1L;
+	
+	private AID emaTopic;
+	
+	private int mcaCount;
+	
+	private Date startDate; 
+	
+	protected void setup(){
+		
+		Object[] args=getArguments();
+		mcaCount= Integer.parseInt((String)(args[0])) ;
+		
+		try {	
+			TopicManagementHelper topicHelper=(TopicManagementHelper) getHelper(TopicManagementHelper.SERVICE_NAME);
+			emaTopic=topicHelper.createTopic("EMA");
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		
+		addBehaviour(new WakerBehaviour(this,60000) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onWake() {
+				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+				msg.setContent("Start spamming");
+				msg.addReceiver(emaTopic);
+				System.out.println(getAID().getName() +": Start spamming message was sended.");
+				startDate=new Date();
+				send(msg);
+			}
+		});
+		
+		addBehaviour(new CyclicBehaviour(this) {
+
+			private static final long serialVersionUID = 1L;
+
+			private int receivedMCACount=0;
+			@Override
+			public void action() {
+				ACLMessage rcv = receive();
+				if(rcv !=null) {
+					receivedMCACount++;
+					if(receivedMCACount==mcaCount){
+						Date endDate=new Date();
+						removeBehaviour(this);
+						System.out.println(getAID().getName() +": Statistics: ");
+						System.out.println(getAID().getName() +": Start date: "+ startDate);
+						System.out.println(getAID().getName() +": End date: " + endDate);
+					}
+				}
+				else {
+					block();
+				}
+			}
+		});
+	}
+	
+	protected void takeDown(){
+		super.takeDown();
+	}
+}

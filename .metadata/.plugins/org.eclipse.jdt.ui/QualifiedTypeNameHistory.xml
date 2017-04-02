@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="jade.core.behaviours.CyclicBehaviour"/>
+<fullyQualifiedTypeName name="jade.lang.acl.MessageTemplate"/>
+<fullyQualifiedTypeName name="jade.core.behaviours.Behaviour"/>
+<fullyQualifiedTypeName name="jade.core.messaging.TopicManagementHelper"/>
+<fullyQualifiedTypeName name="jade.lang.acl.ACLMessage"/>
+<fullyQualifiedTypeName name="jade.domain.FIPANames"/>
+<fullyQualifiedTypeName name="jade.domain.mobility.MobilityOntology"/>
+<fullyQualifiedTypeName name="jade.content.onto.basic.Action"/>
+<fullyQualifiedTypeName name="jade.domain.JADEAgentManagement.WhereIsAgentAction"/>
+<fullyQualifiedTypeName name="jade.content.onto.OntologyException"/>
+<fullyQualifiedTypeName name="jade.content.lang.Codec.CodecException"/>
+<fullyQualifiedTypeName name="jade.content.onto.annotations.Result"/>
+<fullyQualifiedTypeName name="jade.content.onto.UngroundedException"/>
+<fullyQualifiedTypeName name="jade.util.leap.Iterator"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="jade.content.lang.sl.SLCodec"/>
+<fullyQualifiedTypeName name="java.io.Serializable"/>
+<fullyQualifiedTypeName name="jade.util.leap.Serializable"/>
+<fullyQualifiedTypeName name="jade.gui.GuiAgent"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="jade.domain.FIPAAgentManagement.AMSAgentDescription"/>
+<fullyQualifiedTypeName name="jade.domain.FIPAAgentManagement.SearchConstraints"/>
+<fullyQualifiedTypeName name="jade.domain.AMSService"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+</qualifiedTypeNameHistroy>
