@@ -1,0 +1,12 @@
+
+public class SupplyRequest {
+
+	public SupplyRequest(int edgeNr, int vehicleCount, int requestedTime){
+		EdgeNr=edgeNr;
+		VehicleCount=vehicleCount;
+		RequestedTime=requestedTime;
+	}
+	public int EdgeNr;
+	public int VehicleCount;
+	public int RequestedTime;
+}

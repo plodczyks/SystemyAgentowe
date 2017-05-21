@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe\Messina"/>
 		<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\SA2"/>
 	</list>
 	<section name="NewWizardAction">

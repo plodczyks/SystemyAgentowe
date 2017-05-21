@@ -1,0 +1,20 @@
+
+public class SupplyRequest {
+
+	public SupplyRequest(int edgeNr, int vehicleCount, int requestedTime){
+		EdgeNr=edgeNr;
+		VehicleCount=vehicleCount;
+		RequestedTime=requestedTime;
+	}
+	public SupplyRequest() {
+	}
+	public int EdgeNr;
+	public int VehicleCount;
+	public int RequestedTime;
+	
+	@Override
+	public boolean equals(Object o){
+		SupplyRequest sr=(SupplyRequest)o;
+		return this.EdgeNr==sr.EdgeNr && this.VehicleCount==sr.VehicleCount && this.RequestedTime==sr.RequestedTime;
+	}
+}

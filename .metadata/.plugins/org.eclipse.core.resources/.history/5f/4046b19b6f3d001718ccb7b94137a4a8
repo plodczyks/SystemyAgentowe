@@ -1,0 +1,57 @@
+import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+
+
+public class FerryAgent extends Agent {
+
+	protected void setup(){
+		
+		addBehaviour(new CyclicBehaviour(this){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void action() {
+				ACLMessage rcv = receive();
+				if(rcv !=null) {
+					if(rcv.getConversationId().contains("Vehicles Order")){
+						HandleRequestForNewSupply(rcv);
+					}
+				}
+				else{
+					block();
+				}
+			}
+		});
+	}
+	
+	public void HandleRequestForNewSupply(ACLMessage msg){
+		String[] description=msg.getContent().split("\n");
+		int edgeNr=Integer.parseInt((description[0].split(":")[1]).trim());
+		int vehicleCount=Integer.parseInt((description[1].split(":")[1]).trim());
+		int timeToGet=Integer.parseInt((description[2].split(":")[1]).trim());
+		
+		//TODO - calculate possibility for request (vehicleCount and time) 
+		vehicleCount=2;
+		timeToGet=30;
+		
+		System.out.println(getAID().getName() +": Handle Vehicles Order Request from "+msg.getSender().getLocalName());
+		SendResponseForNewSupply(msg.getSender(),edgeNr,vehicleCount,timeToGet);
+	}
+
+	private void SendResponseForNewSupply(AID receiver, int edgeNr, int vehicleCount, int timeToGet) {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId("Vehicles Order");
+		String content= "Edge: "+edgeNr+"\n"+"Vehicle count: "+vehicleCount+"\n"+"Time to get: "+ timeToGet;
+		msg.setContent(content);
+		msg.addReceiver(receiver);
+		System.out.println(getAID().getName() +": Send Vehicles Order Response to "+receiver.getName());
+		send(msg);
+	}
+	
+	
+}
