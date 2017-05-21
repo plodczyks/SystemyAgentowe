@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
@@ -25,6 +26,8 @@ public class FerryAgent extends Agent {
 	//extra capacity params
 	private int freePlacesFrom1To2=CAPACITY;
 	private int freePlacesFrom2To1=CAPACITY;
+	private int handlePlacesFrom1To2=0;
+	private int handlePlacesFrom2To1=0;
 	
 
 	
@@ -60,6 +63,14 @@ public class FerryAgent extends Agent {
 				else{
 					block();
 				}
+			}
+		});
+		
+		addBehaviour(new TickerBehaviour(this,1000){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onTick() {
+				HandleTimeElapsed();
 			}
 		});
 	}
@@ -104,10 +115,12 @@ public class FerryAgent extends Agent {
 			if(freePlacesFrom1To2>request.VehicleCount){
 				response.VehicleCount=request.VehicleCount;
 				freePlacesFrom1To2-=request.VehicleCount;
+				handlePlacesFrom1To2+=request.VehicleCount;
 			}
 			else{
 				response.VehicleCount=freePlacesFrom1To2;
 				freePlacesFrom1To2=0;
+				handlePlacesFrom1To2=CAPACITY;
 			}
 		}
 		else{  //request.ShoreNr==2
@@ -124,14 +137,52 @@ public class FerryAgent extends Agent {
 			if(freePlacesFrom2To1>request.VehicleCount){
 				response.VehicleCount=request.VehicleCount;
 				freePlacesFrom2To1-=request.VehicleCount;
+				handlePlacesFrom2To1+=request.VehicleCount;
 			}
 			else{
 				response.VehicleCount=freePlacesFrom2To1;
 				freePlacesFrom2To1=0;
+				handlePlacesFrom2To1=CAPACITY;
 			}
 		}
 		return response;
 	}
 	
+	private void HandleTimeElapsed(){
+		switch(state){
+			case SHORE_1:
+				if(handlePlacesFrom1To2==CAPACITY){
+					state=FerryState.TRIP_FROM_1_TO_2;
+					freePlacesFrom1To2=CAPACITY;
+					handlePlacesFrom1To2=0;
+				}
+				break;
+			case TRIP_FROM_1_TO_2:
+				if(positionIndex<allPositions.size()-1){
+					positionIndex++;
+				}
+				else{
+					state=FerryState.SHORE_2;
+				}
+				break;
+			case SHORE_2:
+				if(handlePlacesFrom2To1==CAPACITY){
+					state=FerryState.TRIP_FROM_2_TO_1;
+					freePlacesFrom2To1=CAPACITY;
+					handlePlacesFrom2To1=0;
+				}
+				break;
+			case TRIP_FROM_2_TO_1:
+				if(positionIndex>0){
+					positionIndex--;
+				}
+				else{
+					state=FerryState.SHORE_1;
+				}
+				break;
+		}
+		System.out.println(getAID().getName() +": My location is "+allPositions.get(positionIndex));
+		System.out.println(getAID().getName() +": My state is "+state);
+	}
 	
 }

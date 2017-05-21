@@ -13,9 +13,4 @@ public class Point {
 		Point p=(Point)o;
 		return this.Latitude==p.Latitude && this.Longitude==p.Longitude;
 	}
-	
-	@Override
-	public String toString(){
-		return "("+Latitude+","+Longitude+")";
-	}
 }

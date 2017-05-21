@@ -1,0 +1,165 @@
+import java.util.LinkedList;
+
+import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+
+
+public class FerryAgent extends Agent {
+
+	
+	//starting params
+	private static final int CAPACITY=20;
+	private FerryState state=FerryState.SHORE_1;
+	
+	//extra position params
+	public Point actualPosition;
+	public LinkedList<Point> allPositions;
+	private int positionIndex;
+	
+	//extra capacity params
+	private int freePlacesFrom1To2=CAPACITY;
+	private int freePlacesFrom2To1=CAPACITY;
+	private int handlePlacesFrom1To2=0;
+	private int handlePlacesFrom2To1=0;
+	
+
+	
+	protected void setup(){
+		
+		actualPosition=new Point(0,0);
+		allPositions=new LinkedList<Point>();
+		allPositions.add(new Point(0,0));
+		allPositions.add(new Point(0.1,0));
+		allPositions.add(new Point(0.2,0));
+		allPositions.add(new Point(0.3,0));
+		allPositions.add(new Point(0.4,0));
+		allPositions.add(new Point(0.5,0));
+		allPositions.add(new Point(0.6,0));
+		allPositions.add(new Point(0.7,0));
+		allPositions.add(new Point(0.8,0));
+		allPositions.add(new Point(0.9,0));
+		allPositions.add(new Point(1,0));
+		allPositions.add(new Point(1.1,0));
+		positionIndex=0;
+
+		
+		addBehaviour(new CyclicBehaviour(this){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void action() {
+				ACLMessage rcv = receive();
+				if(rcv !=null) {
+					if(rcv.getConversationId().contains("Vehicles Order")){
+						HandleRequestForNewSupply(rcv);
+					}
+				}
+				else{
+					block();
+				}
+			}
+		});
+		
+		addBehaviour(new WakerBehaviour(this,1000)){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onWake() {
+				HandleTimeElapsed();
+			}
+		});
+	}
+	
+	public void HandleRequestForNewSupply(ACLMessage msg){
+		String[] description=msg.getContent().split("\n");
+		int shoreNr=Integer.parseInt((description[0].split(":")[1]).trim());
+		int vehicleCount=Integer.parseInt((description[1].split(":")[1]).trim());
+		int roadTime=Integer.parseInt((description[2].split(":")[1]).trim());
+		
+		SupplyRequest response=CalculateFerryPossibility(new SupplyRequest(shoreNr,vehicleCount,roadTime));
+		
+		System.out.println(getAID().getName() +": Handle Vehicles Order Request from "+msg.getSender().getLocalName());
+		SendResponseForNewSupply(msg.getSender(),response);
+	}
+
+	private void SendResponseForNewSupply(AID receiver,SupplyRequest response) {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId("Vehicles Order");
+		String content= "Shore nr: "+response.ShoreNr+"\n"+
+				"Vehicle count: "+response.VehicleCount+"\n"+
+				"Time to start: "+ response.RequestedTime;
+		msg.setContent(content);
+		msg.addReceiver(receiver);
+		System.out.println(getAID().getName() +": Send Vehicles Order Response to "+receiver.getLocalName());
+		send(msg);
+	}
+	
+	private SupplyRequest CalculateFerryPossibility(SupplyRequest request){
+		SupplyRequest response=new SupplyRequest(request.ShoreNr,0,0);
+		if(request.ShoreNr==1){
+			if(state==FerryState.SHORE_1){
+				response.RequestedTime=0;
+			}
+			else if(state==FerryState.TRIP_FROM_2_TO_1){		
+				response.RequestedTime=java.lang.Math.max(0,positionIndex-request.RequestedTime);
+			}
+			else {
+				return response;
+			}
+				
+			if(freePlacesFrom1To2>request.VehicleCount){
+				response.VehicleCount=request.VehicleCount;
+				freePlacesFrom1To2-=request.VehicleCount;
+			}
+			else{
+				response.VehicleCount=freePlacesFrom1To2;
+				freePlacesFrom1To2=0;
+			}
+		}
+		else{  //request.ShoreNr==2
+			if(state==FerryState.SHORE_2){
+				response.RequestedTime=0;
+			}
+			else if(state==FerryState.TRIP_FROM_1_TO_2){
+				response.RequestedTime=java.lang.Math.max(0,allPositions.size()-1- positionIndex-request.RequestedTime);
+			}
+			else {
+				return response;
+			}
+				
+			if(freePlacesFrom2To1>request.VehicleCount){
+				response.VehicleCount=request.VehicleCount;
+				freePlacesFrom2To1-=request.VehicleCount;
+			}
+			else{
+				response.VehicleCount=freePlacesFrom2To1;
+				freePlacesFrom2To1=0;
+			}
+		}
+		return response;
+	}
+	
+	private void HandleTimeElapsed(){
+		
+		switch(state){
+			case SHORE_1:
+				
+				break;
+			case TRIP_FROM_1_TO_2:
+				
+				break;
+			case SHORE_2:
+				
+				break;
+			case TRIP_FROM_2_TO_1:
+				
+				break;
+		
+		}
+	}
+	
+}

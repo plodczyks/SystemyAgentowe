@@ -1,0 +1,94 @@
+import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.WakerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+
+
+public class WarehouseAgent extends Agent {
+
+	//starting parameters
+	private int wakeTime=10;
+	private int vehicleCount=5;
+	private int shoreNumber=1;
+	private int roadTime=5;
+	String ferryName="Ferry1";
+	
+	private int transportVehicleIndex;
+	
+	protected void setup(){
+		transportVehicleIndex=1;
+		
+		addBehaviour(new WakerBehaviour(this,wakeTime*1000){
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void onWake() {
+				SendRequestForNewSupply();
+			}
+		});
+		
+		addBehaviour(new CyclicBehaviour(this){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void action() {
+				ACLMessage rcv = receive();
+				if(rcv !=null) {
+					if(rcv.getConversationId().contains("Vehicles Order")){
+						HandleResponseForNewSupply(rcv);
+					}
+				}
+				else{
+					block();
+				}
+			}
+		});
+	}
+		
+	
+	public void SendRequestForNewSupply(){
+		
+		AID receiver=new AID(ferryName,AID.ISLOCALNAME);
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setConversationId("Vehicles Order");
+		String content= "Shore nr: "+shoreNumber+"\n"+
+				"Vehicle count: "+vehicleCount+"\n"+
+				"Road time: "+ roadTime;
+		msg.setContent(content);
+		msg.addReceiver(receiver);
+		System.out.println(getAID().getName() +": Send Vehicles Order Request to "+receiver.getLocalName());
+		send(msg);
+	}
+	
+	public void HandleResponseForNewSupply(ACLMessage msg){
+		
+		String[] description=msg.getContent().split("\n");
+		int handledVehicleCount=Integer.parseInt((description[1].split(":")[1]).trim());
+		int timeToStart=Integer.parseInt((description[2].split(":")[1]).trim());
+		
+		vehicleCount-=handledVehicleCount;
+		if(handledVehicleCount>0){	
+			addBehaviour(new WakerBehaviour(this,timeToStart*1000){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected void onWake() {
+						for(int i=0;i<handledVehicleCount;i++){
+							ContainerController cc = getContainerController();
+							AgentController ac;
+							try {
+								ac = cc.createNewAgent(getLocalName()+"TransportVehicle"+transportVehicleIndex, "TransportVehicleAgent", null);
+								ac.start();
+							} catch (StaleProxyException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}								
+							transportVehicleIndex++;
+						}
+					}
+			});
+		}
+		System.out.println(getAID().getName() +": Handle Vehicles Order Response from "+msg.getSender().getLocalName());
+	}
+}

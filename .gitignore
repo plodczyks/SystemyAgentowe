@@ -1,3 +1,7 @@
 *.class
 *.class
 *.class
+Messina/bin/FerryAgent.class
+Messina/bin/FerryAgent.class
+Messina/bin/WarehouseAgent.class
+Messina/bin/TransportVehicleAgent.class

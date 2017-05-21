@@ -12,7 +12,7 @@ public class WarehouseAgent extends Agent {
 
 	//starting parameters
 	private int wakeTime=10;
-	private int vehicleCount=5;
+	private int vehicleCount=7;
 	private int shoreNumber=1;
 	private int roadTime=5;
 	String ferryName="Ferry1";
@@ -20,6 +20,9 @@ public class WarehouseAgent extends Agent {
 	private int transportVehicleIndex;
 	
 	protected void setup(){
+		
+//		Object[] args=getArguments();		
+		
 		transportVehicleIndex=1;
 		
 		addBehaviour(new WakerBehaviour(this,wakeTime*1000){
