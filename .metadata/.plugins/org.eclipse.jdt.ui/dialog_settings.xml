@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe\Messina\lib" key="org.eclipse.jdt.ui.lastextjar"/>
 	<section name="RefactoringWizard.preview">
 		<item value="600" key="width"/>
 		<item value="400" key="height"/>
@@ -30,7 +30,7 @@
 		<item value="11" key="INCLUDE_MASK"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item value="2" key="pageIndex"/>
+		<item value="0" key="pageIndex"/>
 	</section>
 	<section name="quick_assist_proposal_size">
 	</section>

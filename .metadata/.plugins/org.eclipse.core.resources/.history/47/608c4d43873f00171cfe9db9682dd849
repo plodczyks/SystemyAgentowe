@@ -1,0 +1,76 @@
+import java.util.LinkedList;
+
+import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
+import jade.lang.acl.ACLMessage;
+
+
+public class TransportVehicleAgent extends Agent {
+	
+	//road parameters
+	//public LinkedList<Point> allPositions;
+	private int positionIndex;
+	private Point firstLocation;
+	private Point coastLocation;
+	private int roadTime;
+	
+	//to correct
+	private String ferryName="Ferry1";	
+	private int shoreNumber=1;
+	
+	protected void setup(){
+		
+		Object[] args=getArguments();
+		firstLocation=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
+		coastLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
+		roadTime=Integer.parseInt((String)args[4]);
+		
+//		allPositions=new LinkedList<Point>();
+//		allPositions.add(new Point(0,0));
+//		allPositions.add(new Point(0.1,0));
+//		allPositions.add(new Point(0.2,0));
+//		allPositions.add(new Point(0.3,0));
+//		allPositions.add(new Point(0.4,0));
+//		allPositions.add(new Point(0.5,0));
+//		allPositions.add(new Point(0.6,0));
+//		allPositions.add(new Point(0.7,0));
+//		allPositions.add(new Point(0.8,0));
+//		allPositions.add(new Point(0.9,0));
+//		allPositions.add(new Point(1,0));
+//		allPositions.add(new Point(1.1,0));
+		positionIndex=0;
+		
+		addBehaviour(new TickerBehaviour(this,1000){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onTick() {
+				if(positionIndex>=allPositions.size()){
+					removeBehaviour(this);
+				}
+				else{
+					HandleTimeElapsed();
+				}
+			}
+		});
+	}
+	
+	private void HandleTimeElapsed(){
+		if(positionIndex<allPositions.size()-1){
+			System.out.println(getAID().getName() +": My location is "+allPositions.get(positionIndex));
+		}
+		else{
+			AID receiver=new AID(ferryName,AID.ISLOCALNAME);
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setConversationId("Vehicle at coast");
+			String content= "Shore nr: "+shoreNumber+"\n"+
+					"Vehicle ready for trip";
+			msg.setContent(content);
+			msg.addReceiver(receiver);
+			System.out.println(getAID().getName() +": Send Vehicles At Coast Inform to "+receiver.getLocalName());
+			send(msg);
+		}
+		positionIndex++;
+	}	
+}

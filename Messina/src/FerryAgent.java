@@ -19,8 +19,9 @@ public class FerryAgent extends Agent {
 	private FerryState state=FerryState.SHORE_1;
 	
 	//extra position params
-	public Point actualPosition;
-	public LinkedList<Point> allPositions;
+	private Point coast1Location;
+	private Point coast2Location;
+	private int roadTime;
 	private int positionIndex;
 	
 	//extra capacity params
@@ -33,22 +34,11 @@ public class FerryAgent extends Agent {
 	
 	protected void setup(){
 		
-		actualPosition=new Point(0,0);
-		allPositions=new LinkedList<Point>();
-		allPositions.add(new Point(0,0));
-		allPositions.add(new Point(0.1,0));
-		allPositions.add(new Point(0.2,0));
-		allPositions.add(new Point(0.3,0));
-		allPositions.add(new Point(0.4,0));
-		allPositions.add(new Point(0.5,0));
-		allPositions.add(new Point(0.6,0));
-		allPositions.add(new Point(0.7,0));
-		allPositions.add(new Point(0.8,0));
-		allPositions.add(new Point(0.9,0));
-		allPositions.add(new Point(1,0));
-		allPositions.add(new Point(1.1,0));
+		Object[] args=getArguments();
+		coast1Location=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
+		coast2Location=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
+		roadTime=Integer.parseInt((String)args[4]);
 		positionIndex=0;
-
 		
 		addBehaviour(new CyclicBehaviour(this){
 			private static final long serialVersionUID = 1L;
@@ -58,6 +48,9 @@ public class FerryAgent extends Agent {
 				if(rcv !=null) {
 					if(rcv.getConversationId().contains("Vehicles Order")){
 						HandleRequestForNewSupply(rcv);
+					}
+					else if(rcv.getConversationId().contains("Vehicle at coast")){
+						HandleVehicleInform(rcv);
 					}
 				}
 				else{
@@ -75,12 +68,20 @@ public class FerryAgent extends Agent {
 		});
 	}
 	
-	public void HandleRequestForNewSupply(ACLMessage msg){
+	private void HandleRequestForNewSupply(ACLMessage msg){
 		String[] description=msg.getContent().split("\n");
-		int shoreNr=Integer.parseInt((description[0].split(":")[1]).trim());
-		int vehicleCount=Integer.parseInt((description[1].split(":")[1]).trim());
-		int roadTime=Integer.parseInt((description[2].split(":")[1]).trim());
 		
+		double latitude=Double.parseDouble((description[0].split(":")[1]).split(",")[0].trim());
+		double longitude=Double.parseDouble((description[0].split(":")[1]).split(",")[1].trim());	
+		int shoreNr=2;
+		if(coast1Location.Latitude==latitude && coast1Location.Longitude==longitude){
+			shoreNr=1;
+		}
+		
+		int roadTime=Integer.parseInt((description[1].split(":")[1]).trim());
+		
+		int vehicleCount=Integer.parseInt((description[2].split(":")[1]).trim());
+
 		SupplyRequest response=CalculateFerryPossibility(new SupplyRequest(shoreNr,vehicleCount,roadTime));
 		
 		System.out.println(getAID().getName() +": Handle Vehicles Order Request from "+msg.getSender().getLocalName());
@@ -90,9 +91,8 @@ public class FerryAgent extends Agent {
 	private void SendResponseForNewSupply(AID receiver,SupplyRequest response) {
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setConversationId("Vehicles Order");
-		String content= "Shore nr: "+response.ShoreNr+"\n"+
-				"Vehicle count: "+response.VehicleCount+"\n"+
-				"Time to start: "+ response.RequestedTime;
+		String content= "Vehicle count: "+response.VehicleCount+"\n"+
+						"Time to start: "+ response.RequestedTime;
 		msg.setContent(content);
 		msg.addReceiver(receiver);
 		System.out.println(getAID().getName() +": Send Vehicles Order Response to "+receiver.getLocalName());
@@ -115,12 +115,10 @@ public class FerryAgent extends Agent {
 			if(freePlacesFrom1To2>request.VehicleCount){
 				response.VehicleCount=request.VehicleCount;
 				freePlacesFrom1To2-=request.VehicleCount;
-				handlePlacesFrom1To2+=request.VehicleCount;
 			}
 			else{
 				response.VehicleCount=freePlacesFrom1To2;
 				freePlacesFrom1To2=0;
-				handlePlacesFrom1To2=CAPACITY;
 			}
 		}
 		else{  //request.ShoreNr==2
@@ -128,7 +126,7 @@ public class FerryAgent extends Agent {
 				response.RequestedTime=0;
 			}
 			else if(state==FerryState.TRIP_FROM_1_TO_2){
-				response.RequestedTime=java.lang.Math.max(0,allPositions.size()-1- positionIndex-request.RequestedTime);
+				response.RequestedTime=java.lang.Math.max(0,roadTime-1- positionIndex-request.RequestedTime);
 			}
 			else {
 				return response;
@@ -137,15 +135,33 @@ public class FerryAgent extends Agent {
 			if(freePlacesFrom2To1>request.VehicleCount){
 				response.VehicleCount=request.VehicleCount;
 				freePlacesFrom2To1-=request.VehicleCount;
-				handlePlacesFrom2To1+=request.VehicleCount;
 			}
 			else{
 				response.VehicleCount=freePlacesFrom2To1;
 				freePlacesFrom2To1=0;
-				handlePlacesFrom2To1=CAPACITY;
 			}
 		}
 		return response;
+	}
+	
+	private void HandleVehicleInform(ACLMessage msg){
+		String[] description=msg.getContent().split("\n");
+		
+		double latitude=Double.parseDouble((description[0].split(":")[1]).split(",")[0].trim());
+		double longitude=Double.parseDouble((description[0].split(":")[1]).split(",")[1].trim());	
+		int shoreNr=2;
+		if(coast1Location.Latitude==latitude && coast1Location.Longitude==longitude){
+			shoreNr=1;
+		}
+		
+		if(shoreNr==1){
+			handlePlacesFrom1To2++;
+		}
+		else{
+			handlePlacesFrom2To1++;
+		}
+		
+		System.out.println(getAID().getName() +": Handle Vehicle Inform from "+msg.getSender().getLocalName());
 	}
 	
 	private void HandleTimeElapsed(){
@@ -158,7 +174,7 @@ public class FerryAgent extends Agent {
 				}
 				break;
 			case TRIP_FROM_1_TO_2:
-				if(positionIndex<allPositions.size()-1){
+				if(positionIndex<roadTime-1){
 					positionIndex++;
 				}
 				else{
@@ -181,8 +197,8 @@ public class FerryAgent extends Agent {
 				}
 				break;
 		}
-		System.out.println(getAID().getName() +": My location is "+allPositions.get(positionIndex));
-		System.out.println(getAID().getName() +": My state is "+state);
+	//	System.out.println(getAID().getName() +": My location is "+allPositions.get(positionIndex));
+	//	System.out.println(getAID().getName() +": My state is "+state);
 	}
 	
 }

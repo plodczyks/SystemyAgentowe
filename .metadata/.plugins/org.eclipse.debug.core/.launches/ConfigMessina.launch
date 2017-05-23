@@ -8,6 +8,6 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="jade.Boot"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-gui -agents &quot;Ferry1:FerryAgent;Warehouse1:WarehouseAgent;Warehouse2:WarehouseAgent;Warehouse3:WarehouseAgent&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-gui -agents &quot;Ferry1:FerryAgent(38.222810,15.632982,38.210375,15.561670,15);Warehouse1:WarehouseAgent(38.211311,15.691547,38.222810,15.632982,10,5,7);Warehouse2:WarehouseAgent(38.116347,15.649820,38.222810,15.632982,5,12,7);Warehouse3:WarehouseAgent( 38.257003,15.752489,38.222810, 15.632982,3,5,7)&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Messina"/>
 </launchConfiguration>
