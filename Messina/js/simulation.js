@@ -1,108 +1,77 @@
 var map;
-  var directionDisplay;
-  var directionsService;
-  var stepDisplay;
- 
-  var position;
-  var marker = [];
-  var polyline = [];
-  var poly2 = [];
-  var poly = null;
-  var startLocation = [];
-  var endLocation = [];
-  var timerHandle = [];
-    
-  
-  var speed = 0.000005, wait = 1;
-  var infowindow = null;
-  
-  var myPano;   
-  var panoClient;
-  var nextPanoId;
-  
-  var startLoc = new Array();
-  startLoc[0] = 'Faro Superiore';
-  startLoc[1] = 'Reggio di Calabra'
-  
-
-  var endLoc = new Array();
-  endLoc[0] = 'Mortelle';
-  endLoc[1] = 'Villa san Giovanni';
-  
-
-
-  var Colors = ["#FF0000", "#00FF00", "#0000FF"];
-
-
-function initialize() {  
-
-  infowindow = new google.maps.InfoWindow(
+var infoWindow;
+var connection;
+var clients = 0;
+var directionService;
+var directionsDisplay;
+var startLocation = [];
+var endLocation = [];
+var polyline = [];
+var poly2 = [];
+var marker = [];
+var timerHandle = [];
+function initialize(){
+	
+	directionsDisplay = new Array();
+	connection = new WebSocket('ws://127.0.0.1:8888');
+	connection.onopen = function () {
+    console.log('Connected!');
+    };
+   
+    connection.onerror = function (error) {
+    console.log('WebSocket Error ' + error);
+    };
+	
+	infowindow = new google.maps.InfoWindow(
     { 
       size: new google.maps.Size(150,50)
     });
-
-    var myOptions = {
-      zoom: 3,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+	
+	var myLatLng = new google.maps.LatLng(38.176730, 15.594710);
+    
+	var myOptions = {
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  center : myLatLng
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
-    address = 'Messina'
-    geocoder = new google.maps.Geocoder();
-    geocoder.geocode( { 'address': address}, function(results, status) {
-     map.fitBounds(results[0].geometry.viewport);
-
-    }); 
-  // setRoutes();
-  } 
-
-
-function createMarker(latlng, label, html) {
-// alert("createMarker("+latlng+","+label+","+html+","+color+")");
-    var contentString = '<b>'+label+'</b><br>'+html;
-    var marker = new google.maps.Marker({
-        position: latlng,
-        map: map,
-        title: label,
-        zIndex: Math.round(latlng.lat()*-100000)<<5
-        });
-        marker.myname = label;
-
-
-    google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(contentString); 
-        infowindow.open(map,marker);
-        });
-    return marker;
-}  
-
-function setRoutes(){   
-
-    var directionsDisplay = new Array();
-
-    for (var i=0; i< startLoc.length; i++){
-
-    var rendererOptions = {
+	
+    
+	connection.onmessage = function (e) {
+		var obj = JSON.parse(e.data);
+		var markstart = new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']);
+		var markend = new google.maps.LatLng(obj['end']['lat'],obj['end']['lng']);
+		setRoute(markstart,markend);
+		clients=clients+1;
+	}
+}
+ function addMarker(markerPosition) {
+      var marker = new google.maps.Marker({
+        position: markerPosition,
+        map:map,
+        title:"test"
+      });
+	 return marker;
+    }
+function setRoute(startLoc, endLoc){
+	
+	var rendererOptions = {
         map: map,
         suppressMarkers : true,
         preserveViewport: true
     }
-    directionsService = new google.maps.DirectionsService();
+	directionsService = new google.maps.DirectionsService();
 
-    var travelMode = google.maps.DirectionsTravelMode.DRIVING;  
-
-    var request = {
-        origin: startLoc[i],
-        destination: endLoc[i],
+    var travelMode = google.maps.DirectionsTravelMode.DRIVING;
+	
+	var request = {
+        origin: startLoc,
+        destination: endLoc,
         travelMode: travelMode
-    };  
+    };
+	directionsService.route(request,makeRouteCallback(clients,directionsDisplay[clients]));
 
-        directionsService.route(request,makeRouteCallback(i,directionsDisplay[i]));
-
-    }   
-
-
-    function makeRouteCallback(routeNum,disp){
+	function makeRouteCallback(routeNum,disp){
         if (polyline[routeNum] && (polyline[routeNum].getMap() != null)) {
          startAnimation(routeNum);
          return;
@@ -144,7 +113,7 @@ function setRoutes(){
               if (i == 0) { 
                 startLocation[routeNum].latlng = legs[i].start_location;
                 startLocation[routeNum].address = legs[i].start_address;
-                marker[routeNum] = createMarker(legs[i].start_location,"start",legs[i].start_address,"green");
+                marker[routeNum] = addMarker(legs[i].start_location);
               }
               endLocation[routeNum].latlng = legs[i].end_location;
               endLocation[routeNum].address = legs[i].end_address;
@@ -168,10 +137,9 @@ function setRoutes(){
 
     } // else alert("Directions request failed: "+status);
 
-  }
-
+  }	
+	
 }
-
     var lastVertex = 1;
     var stepnum=0;
     var step = 50; // 5; // metres
@@ -220,6 +188,3 @@ function startAnimation(index) {
 
         timerHandle[index] = setTimeout("animate("+index+",50)",2000);  // Allow time for the initial map display
 }
-
-//----------------------------------------------------------------------------    
-google.maps.event.addDomListener(window,'load',initialize);
