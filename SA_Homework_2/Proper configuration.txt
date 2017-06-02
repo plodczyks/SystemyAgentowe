@@ -1,0 +1,11 @@
+RA_Config
+-container -agents "SpammerAgent1:SAAgent(1000,2000);MessageConsumingAgent1:MCAAgent(2,1000)" -host 192.168.143.106 -port 1111
+
+Przyk³ad dla odpalenia z konsoli(folder classes zawiera wszystkie wersje nowych klas)
+java -cp jade.jar;commons-codec-1.3.jar;classes jade.Boot -container -agents "SpammerAgent1:SAAgent(1000,2000);MessageConsumingAgent1:MCAAgent(2,1000)" -host 192.168.143.106 -port 1111
+
+EMA_Config
+-gui -agents ExperimentMasterAgent:EMAAgent(6,3,10) -local-port 1111 -platform-id SA_Homework
+
+RA_Config
+-container -agents "SpammerAgent1:SAAgent(1000,2000);MessageConsumingAgent1:MCAAgent(2,1000)" -host localhost -port 1111

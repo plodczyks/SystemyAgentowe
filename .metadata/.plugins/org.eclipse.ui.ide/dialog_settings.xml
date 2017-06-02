@@ -4,6 +4,17 @@
 		<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe\Messina"/>
 		<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\SA2"/>
 	</list>
+	<section name="ExternalProjectImportWizard">
+		<item value="false" key="WizardProjectsImportPage.STORE_NESTED_PROJECTS"/>
+		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
+		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
+		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe"/>
+		</list>
+		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
+			<item value=""/>
+		</list>
+	</section>
 	<section name="NewWizardAction">
 		<item value="org.eclipse.jdt.ui.wizards.JavaProjectWizard" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
 		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">

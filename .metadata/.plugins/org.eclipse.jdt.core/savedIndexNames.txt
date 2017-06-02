@@ -1,6 +1,7 @@
 INDEX VERSION 1.130+D:\Nasze Foldery\Slawek\studia\Systemy agentowe w zastosowaniach\Repozytorium\SystemyAgentowe\.metadata\.plugins\org.eclipse.jdt.core
 3121608192.index
 1468096495.index
+3052113724.index
 1979519979.index
 3261555235.index
 1696300077.index
