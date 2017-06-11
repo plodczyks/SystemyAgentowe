@@ -1,4 +1,6 @@
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
+
+import Helpers.Point;
 
 public class Message {
     private Point start;
@@ -7,9 +9,9 @@ public class Message {
         start = new Point(lattitude1,longtitude1);
         end = new Point(lattitude2, longtitude2);
     }
-    @Override
-    public String toString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
+//    @Override
+//    public String toString(){
+//        Gson gson = new Gson();
+//        return gson.toJson(this);
+//    }
 }

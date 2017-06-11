@@ -7,17 +7,6 @@
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
     </src_description>
   </component>
-  <component name="FacetManager">
-    <facet type="google-app-engine" name="Google App Engine">
-      <configuration>
-        <sdk-home-path>$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.0</sdk-home-path>
-        <run-enhancer-on-make>true</run-enhancer-on-make>
-        <files-to-enhance>
-          <file path="$MODULE_DIR$/src" />
-        </files-to-enhance>
-      </configuration>
-    </facet>
-  </component>
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/bin" />
     <exclude-output />
@@ -25,7 +14,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="module-library">
       <library name="commons-codec-1.3.jar">
         <CLASSES>
