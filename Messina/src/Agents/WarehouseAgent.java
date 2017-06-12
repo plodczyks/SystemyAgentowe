@@ -1,6 +1,7 @@
 package Agents;
 
 import Helpers.Point;
+import Helpers.Utilities;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
@@ -9,6 +10,8 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+
+import java.net.URISyntaxException;
 
 
 //first location - 38.211311, 15.691547
@@ -41,9 +44,17 @@ public class WarehouseAgent extends Agent {
 		coastLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
 		roadTime=Integer.parseInt((String)args[4]);
 		limitTime=Integer.parseInt((String)args[5]);
-		vehicleCount=Integer.parseInt((String)args[6]);		
-		
-		
+		vehicleCount=Integer.parseInt((String)args[6]);
+
+		try {
+			Utilities.addWarehouseMarker(location);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+
 		transportVehicleIndex=1;
 		SendVehiclesOrder();
 		
