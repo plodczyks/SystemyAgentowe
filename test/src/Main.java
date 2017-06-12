@@ -21,7 +21,7 @@ public class Main {
 
         for(Message msg : messages)
         {
-            Thread.sleep(5000);
+            //Thread.sleep(5000);
             sender.sendMessage(msg.toString());
         }
     }

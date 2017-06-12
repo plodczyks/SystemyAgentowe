@@ -1,11 +1,8 @@
 package Agents;
 
-import java.util.LinkedList;
-
 import Helpers.Point;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -53,7 +50,7 @@ public class TransportVehicleAgent extends Agent {
 			AID receiver=new AID(ferryName,AID.ISLOCALNAME);
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("Vehicle at coast");
-			String content= "Coast location: "+coastLocation.Latitude+","+coastLocation.Longitude+"\n"+
+			String content= "Coast location: "+coastLocation.lat+","+coastLocation.lng+"\n"+
 							"Vehicle ready for trip";
 			msg.setContent(content);
 			msg.addReceiver(receiver);

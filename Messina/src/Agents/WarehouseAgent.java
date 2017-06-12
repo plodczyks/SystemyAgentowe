@@ -69,7 +69,7 @@ public class WarehouseAgent extends Agent {
 		AID receiver=new AID(ferryName,AID.ISLOCALNAME);
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setConversationId("Vehicles Order");
-		String content= "Coast location: "+coastLocation.Latitude+","+coastLocation.Longitude+"\n"+
+		String content= "Coast location: "+coastLocation.lat+","+coastLocation.lng+"\n"+
 				"Road time: "+ roadTime+"\n"+
                 "Deadline time: "+ limitTime+"\n"+
 				"Vehicle count: "+vehicleCount;
@@ -96,7 +96,7 @@ public class WarehouseAgent extends Agent {
 							AgentController ac;
 							try {
 								ac = cc.createNewAgent(getLocalName()+"TransportVehicle"+transportVehicleIndex, "Agents.TransportVehicleAgent",
-										new Object[]{location.Latitude,location.Longitude,coastLocation.Latitude,coastLocation.Longitude,roadTime});
+										new Object[]{location.lat,location.lng,coastLocation.lat,coastLocation.lng,roadTime});
 								ac.start();
 							} catch (StaleProxyException e) {
 								// TODO Auto-generated catch block

@@ -1,8 +1,11 @@
 package Agents;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 
 import Helpers.*;
+import com.sun.jndi.toolkit.url.Uri;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -10,46 +13,48 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
-
+import org.java_websocket.WebSocket;
 
 
 public class FerryAgent extends Agent {
 
-	//starting params
-	private static final int CAPACITY=20;
-	private FerryState state= FerryState.SHORE_2;
+    //starting params
+    private static final int CAPACITY = 20;
+    private FerryState state = FerryState.SHORE_2;
 
-    private LinkedList<Event> bestScenario=null;
-    private int bestValue=Integer.MAX_VALUE;
+    private LinkedList<Event> bestScenario = null;
+    private int bestValue = Integer.MAX_VALUE;
 
-	//extra position params
-	private Point coast1Location;
-	private Point coast2Location;
-	private int roadTime;
-	private int positionIndex;
+    //extra position params
+    private Point coast1Location;
+    private Point coast2Location;
+    private int roadTime;
+    private int positionIndex;
 
-	//database of requests
-	private LinkedList<WarehouseRequest> coast1Requests=new LinkedList<>();
-	private LinkedList<WarehouseRequest> coast2Requests=new LinkedList<>();
+    //new coast locations
 
 
-	private int time=0;
-	private LinkedList<StartEvent> agentScenario=new LinkedList<>();
-	
-	protected void setup(){
+    //database of requests
+    private LinkedList<WarehouseRequest> coast1Requests = new LinkedList<>();
+    private LinkedList<WarehouseRequest> coast2Requests = new LinkedList<>();
 
-		Object[] args=getArguments();
-		coast1Location=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
-		coast2Location=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
-		roadTime=Integer.parseInt((String)args[4]);
-		positionIndex=roadTime;
 
+    private int time = 0;
+    private LinkedList<StartEvent> agentScenario = new LinkedList<>();
+
+    protected void setup() {
+        Object[] args = getArguments();
+        coast1Location = new Point(Double.parseDouble((String) args[0]), Double.parseDouble((String) args[1]));
+        coast2Location = new Point(Double.parseDouble((String) args[2]), Double.parseDouble((String) args[3]));
+        roadTime = Integer.parseInt((String) args[4]);
+        positionIndex = roadTime;
         //add to database vehicle orders
-		addBehaviour(new WakerBehaviour(this,1500){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void onWake() {
-			    while(true) {
+        addBehaviour(new WakerBehaviour(this, 1500) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onWake() {
+                while (true) {
                     ACLMessage rcv = receive();
                     if (rcv != null) {
                         if (rcv.getConversationId().contains("Vehicles Order")) {
@@ -59,7 +64,13 @@ public class FerryAgent extends Agent {
                         break;
                     }
                 }
-                CalculateScenario();
+                try {
+                    CalculateScenario();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //send responses for vehiclesOrder
                 for (Event e : bestScenario) {
                     if (e instanceof HandleRequestEvent) {
@@ -67,29 +78,28 @@ public class FerryAgent extends Agent {
                     }
                 }
 
-                System.out.println(getAID().getName() +": Actual time is "+ time);
-                System.out.println(getAID().getName() +": My location index is "+ positionIndex);
-                System.out.println(getAID().getName() +": My state is "+state);
+                System.out.println(getAID().getName() + ": Actual time is " + time);
+                System.out.println(getAID().getName() + ": My location index is " + positionIndex);
+                System.out.println(getAID().getName() + ": My state is " + state);
                 addTimeElapsedBehaviour();
-			}
+            }
 
 
-
-		});
+        });
 //
 //
 //         else if (rcv.getConversationId().contains("Vehicle at coast")) {
 //            HandleVehicleInform(rcv);
 //        }
-	}
-	
-	private void HandleVehiclesOrder(ACLMessage msg) {
+    }
+
+    private void HandleVehiclesOrder(ACLMessage msg) {
         String[] description = msg.getContent().split("\n");
 
         int shoreNr = 2;
         double latitude = Double.parseDouble((description[0].split(":")[1]).split(",")[0].trim());
         double longitude = Double.parseDouble((description[0].split(":")[1]).split(",")[1].trim());
-        if (coast1Location.Latitude == latitude && coast1Location.Longitude == longitude) {
+        if (coast1Location.lat == latitude && coast1Location.lng == longitude) {
             shoreNr = 1;
         }
 
@@ -116,19 +126,19 @@ public class FerryAgent extends Agent {
         System.out.println(getAID().getName() + ": Send Vehicles Order Response to " + event.Demander.getLocalName());
         send(msg);
     }
-	
-	private void addTimeElapsedBehaviour(){
-        addBehaviour(new TickerBehaviour(this,1000){
-			@Override
-			public void onTick() {
+
+    private void addTimeElapsedBehaviour() {
+        addBehaviour(new TickerBehaviour(this, 1000) {
+            @Override
+            public void onTick() {
                 time++;
-                switch(state) {
+                switch (state) {
                     case SHORE_1:
                         if (agentScenario.size() > 0) {
                             if (agentScenario.getFirst().ShoreNr == 1 && agentScenario.getFirst().StartTime == time) {
                                 agentScenario.removeFirst();
                                 state = FerryState.TRIP_FROM_1_TO_2;
-                               // positionIndex++;
+                                // positionIndex++;
                             }
                         }
                         break;
@@ -141,7 +151,7 @@ public class FerryAgent extends Agent {
                             if (agentScenario.getFirst().ShoreNr == 2 && agentScenario.getFirst().StartTime == time) {
                                 agentScenario.removeFirst();
                                 state = FerryState.TRIP_FROM_2_TO_1;
-                              //  positionIndex--;
+                                //  positionIndex--;
                             }
                         }
                         break;
@@ -150,18 +160,18 @@ public class FerryAgent extends Agent {
                         else positionIndex--;
                         break;
                 }
-                System.out.println(getAID().getName() +": Actual time is "+ time);
-                System.out.println(getAID().getName() +": My location index is "+ positionIndex);
-                System.out.println(getAID().getName() +": My state is "+state);
-			}
-		});
+                System.out.println(getAID().getName() + ": Actual time is " + time);
+                System.out.println(getAID().getName() + ": My location index is " + positionIndex);
+                System.out.println(getAID().getName() + ": My state is " + state);
+            }
+        });
 
 
-	}
+    }
 
-	//region Scenario calculations
+    //region Scenario calculations
 
-	private void CalculateScenario() {
+    private void CalculateScenario() throws URISyntaxException, InterruptedException {
 
         //TO CORRECT!!
         int startShoreNr = 2;
@@ -175,11 +185,13 @@ public class FerryAgent extends Agent {
                 StartEvent startEvent = ((StartEvent) e);
                 agentScenario.add(startEvent);
                 System.out.println(getAID().getName() + ": Ferry start at " + startEvent.StartTime + " from coast " + startEvent.ShoreNr);
+                //TODO: mamy w zasadzie 4 shore'y (patrz mapa)
+                Utilities.startSimulationFerry(startEvent.ShoreNr);
             }
         }
     }
 
-	private void RealizeScenario(int actualTime, int shoreNr, LinkedList<WarehouseRequest> leftCoast, LinkedList<WarehouseRequest> rightCoast, LinkedList<Event> events) {
+    private void RealizeScenario(int actualTime, int shoreNr, LinkedList<WarehouseRequest> leftCoast, LinkedList<WarehouseRequest> rightCoast, LinkedList<Event> events) {
 
         if (leftCoast.size() == 0 && rightCoast.size() == 0) {
             SummarizeScenario(events);
@@ -197,7 +209,7 @@ public class FerryAgent extends Agent {
 
         while (actualDemands.size() > 0) {
             if (actualCapacity == CAPACITY) {
-                ExtendScenario(actualTime,shoreNr,leftCoast,rightCoast,actualDemands,events,newEvents);
+                ExtendScenario(actualTime, shoreNr, leftCoast, rightCoast, actualDemands, events, newEvents);
                 return;
             }
             WarehouseRequest firstDemand = actualDemands.getFirst();
@@ -209,37 +221,37 @@ public class FerryAgent extends Agent {
 
                 if (vehicleToHandle <= CAPACITY - actualCapacity) {
                     actualDemands.removeFirst();
-                    newEvents.add(new HandleRequestEvent(limitTime, actualTime+1 + roadTime+1,vehicleToHandle,startVehicleTime,firstDemand.getDemander()));
+                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, vehicleToHandle, startVehicleTime, firstDemand.getDemander()));
                     actualCapacity += vehicleToHandle;
                 } else {
                     firstDemand.setVehicleCount(vehicleToHandle - (CAPACITY - actualCapacity));
-                    newEvents.add(new HandleRequestEvent(limitTime, actualTime+1 + roadTime+1,CAPACITY - actualCapacity, startVehicleTime, firstDemand.getDemander()));
+                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, CAPACITY - actualCapacity, startVehicleTime, firstDemand.getDemander()));
                     actualCapacity = CAPACITY;
                 }
             } else {
                 //scenario 1" we start immediately
-                ExtendScenario(actualTime,shoreNr,leftCoast,rightCoast,actualDemands,events,newEvents);
+                ExtendScenario(actualTime, shoreNr, leftCoast, rightCoast, actualDemands, events, newEvents);
 
                 //scenario 2: we wait for next transport vehicles
-                int delayTime=firstDemand.getTrackTime()-actualTime;
+                int delayTime = firstDemand.getTrackTime() - actualTime;
                 for (HandleRequestEvent event : newEvents) {
-                    event.StartVehicleTime+=delayTime;
+                    event.StartVehicleTime += delayTime;
                     event.HandleTime += delayTime;
                 }
                 actualTime += delayTime;
             }
         }
-        ExtendScenario(actualTime,shoreNr,leftCoast,rightCoast,actualDemands,events,newEvents);
+        ExtendScenario(actualTime, shoreNr, leftCoast, rightCoast, actualDemands, events, newEvents);
     }
 
     private void ExtendScenario(int actualTime, int shoreNr, LinkedList<WarehouseRequest> leftCoast, LinkedList<WarehouseRequest> rightCoast, LinkedList<WarehouseRequest> actualDemands, LinkedList<Event> events, LinkedList<HandleRequestEvent> newEvents) {
         LinkedList<Event> extendedEvents = new LinkedList<Event>(events);
         extendedEvents.addAll(newEvents);
-        extendedEvents.add(new StartEvent(shoreNr, actualTime+1));
+        extendedEvents.add(new StartEvent(shoreNr, actualTime + 1));
         if (shoreNr == 1) {
-            RealizeScenario(actualTime+1 + roadTime+1, 2,CreateDeepCopy(actualDemands), CreateDeepCopy(rightCoast),extendedEvents);
+            RealizeScenario(actualTime + 1 + roadTime + 1, 2, CreateDeepCopy(actualDemands), CreateDeepCopy(rightCoast), extendedEvents);
         } else {
-            RealizeScenario(actualTime+1 + roadTime+1, 1,CreateDeepCopy(leftCoast),CreateDeepCopy(actualDemands), extendedEvents);
+            RealizeScenario(actualTime + 1 + roadTime + 1, 1, CreateDeepCopy(leftCoast), CreateDeepCopy(actualDemands), extendedEvents);
         }
     }
 
@@ -248,7 +260,7 @@ public class FerryAgent extends Agent {
         for (Event event : events) {
             if (event instanceof HandleRequestEvent) {
                 HandleRequestEvent handleRequestEvent = ((HandleRequestEvent) event);
-                value +=Integer.max(handleRequestEvent.HandleTime - handleRequestEvent.LimitTime, 0) * handleRequestEvent.VehicleCount;
+                value += Integer.max(handleRequestEvent.HandleTime - handleRequestEvent.LimitTime, 0) * handleRequestEvent.VehicleCount;
             }
         }
         if (value < bestValue) {
@@ -260,7 +272,7 @@ public class FerryAgent extends Agent {
     private LinkedList<WarehouseRequest> CreateDeepCopy(LinkedList<WarehouseRequest> requests) {
         LinkedList<WarehouseRequest> result = new LinkedList<>();
         for (WarehouseRequest e : requests) {
-            result.add(new WarehouseRequest(e.getVehicleCount(), e.getLimitTime(), e.getTrackTime(),e.getDemander()));
+            result.add(new WarehouseRequest(e.getVehicleCount(), e.getLimitTime(), e.getTrackTime(), e.getDemander()));
         }
         return result;
     }
@@ -323,7 +335,6 @@ public class FerryAgent extends Agent {
 //        }
 //        return response;
 //    }
-
 
 
 //    private void HandleVehicleInform(ACLMessage msg){

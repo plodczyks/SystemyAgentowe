@@ -2,21 +2,21 @@ package Helpers;
 
 public class Point {
 
-	public Point(double latitude, double longitude){
-		Latitude=latitude;
-		Longitude=longitude;
+	public Point(double lat, double lng){
+		this.lat=lat;
+		this.lng=lng;
 	}
-	public double Latitude;
-	public double Longitude;
+	public double lat;
+	public double lng;
 	
 	@Override
 	public boolean equals(Object o){
 		Point p=(Point)o;
-		return this.Latitude==p.Latitude && this.Longitude==p.Longitude;
+		return this.lat==p.lat && this.lng==p.lng;
 	}
 	
 	@Override
 	public String toString(){
-		return "("+Latitude+","+Longitude+")";
+		return "("+lat+","+lng+")";
 	}
 }

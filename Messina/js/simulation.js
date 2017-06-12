@@ -41,19 +41,28 @@ function initialize(){
 		var obj = JSON.parse(e.data);
 		var markstart = new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']);
 		var markend = new google.maps.LatLng(obj['end']['lat'],obj['end']['lng']);
-		setRoute(markstart,markend);
+		setRoute(markstart,markend, obj.type);
 		clients=clients+1;
 	}
 }
- function addMarker(markerPosition) {
+ function addMarker(markerPosition, type) {
+	 var ico;
+	 console.log(type);
+	  if(type=="FERRY"){
+		  ico = "ship.png"
+	  }
+	  else if (type == "TRUCK"){
+		  ico = "truck.png"
+	  }
       var marker = new google.maps.Marker({
         position: markerPosition,
         map:map,
-        title:"test"
+        title:"test",
+		icon: ico
       });
 	 return marker;
     }
-function setRoute(startLoc, endLoc){
+function setRoute(startLoc, endLoc, type){
 	
 	var rendererOptions = {
         map: map,
@@ -113,7 +122,7 @@ function setRoute(startLoc, endLoc){
               if (i == 0) { 
                 startLocation[routeNum].latlng = legs[i].start_location;
                 startLocation[routeNum].address = legs[i].start_address;
-                marker[routeNum] = addMarker(legs[i].start_location);
+                marker[routeNum] = addMarker(legs[i].start_location, type);
               }
               endLocation[routeNum].latlng = legs[i].end_location;
               endLocation[routeNum].address = legs[i].end_address;
