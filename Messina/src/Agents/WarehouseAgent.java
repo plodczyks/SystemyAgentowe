@@ -80,7 +80,9 @@ public class WarehouseAgent extends Agent {
 		AID receiver=new AID(ferryName,AID.ISLOCALNAME);
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setConversationId("Vehicles Order");
-		String content= "Coast location: "+coastLocation.lat+","+coastLocation.lng+"\n"+
+		String content=
+				"Warehouse location: " + location.lat+","+location.lng+"\n"+
+				"Coast location: "+coastLocation.lat+","+coastLocation.lng+"\n"+
 				"Road time: "+ roadTime+"\n"+
                 "Deadline time: "+ limitTime+"\n"+
 				"Vehicle count: "+vehicleCount;
