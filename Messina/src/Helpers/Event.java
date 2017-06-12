@@ -7,5 +7,9 @@ import java.util.LinkedList;
  */
 public class Event {
 
-    public Event(){}
+    public int StartTime;
+
+    public Event(int startTime) {
+        this.StartTime = startTime;
+    }
 }

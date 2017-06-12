@@ -8,10 +8,9 @@ import Helpers.Event;
 public class StartEvent extends Event {
 
     public StartEvent(int shoreNr,int startTime){
+        super(startTime);
         this.ShoreNr=shoreNr;
-        this.StartTime=startTime;
     }
-
     public int ShoreNr;
-    public int StartTime;
+
 }

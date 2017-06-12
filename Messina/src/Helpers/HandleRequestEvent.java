@@ -9,16 +9,15 @@ import jade.core.AID;
 public class HandleRequestEvent extends Event {
 
     public HandleRequestEvent(int limitTime,int handleTime,int vehicleCount,int startVehicleTime,AID demander){
+        super(startVehicleTime);
         this.LimitTime=limitTime;
         this.HandleTime=handleTime;
-        this.StartVehicleTime=startVehicleTime;
         this.VehicleCount=vehicleCount;
         this.Demander=demander;
     }
 
     public int LimitTime;
     public int HandleTime;
-    public int StartVehicleTime;
     public int VehicleCount;
     public AID Demander;
 }

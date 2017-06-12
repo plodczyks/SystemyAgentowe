@@ -2,6 +2,7 @@ package Agents;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import Helpers.*;
@@ -64,13 +65,7 @@ public class FerryAgent extends Agent {
                         break;
                     }
                 }
-                try {
-                    CalculateScenario();
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                CalculateScenario();
                 //send responses for vehiclesOrder
                 for (Event e : bestScenario) {
                     if (e instanceof HandleRequestEvent) {
@@ -81,6 +76,24 @@ public class FerryAgent extends Agent {
                 System.out.println(getAID().getName() + ": Actual time is " + time);
                 System.out.println(getAID().getName() + ": My location index is " + positionIndex);
                 System.out.println(getAID().getName() + ": My state is " + state);
+                while(bestScenario.size()>0 && bestScenario.getFirst().StartTime==time){
+                    Event ev=bestScenario.removeFirst();
+                    if (ev instanceof HandleRequestEvent) {
+                        HandleRequestEvent vehicleEvent=((HandleRequestEvent) ev);
+                        //Utilities.startSimulationTruck(/*trzeba dodac dane odnosnie poczatku i konca przez pierwsza wiadomosc*/);
+                    }
+                    else if(ev instanceof StartEvent){
+                        StartEvent ferryEvent=((StartEvent) ev);
+                        try {
+                            Utilities.startSimulationFerry(ferryEvent.ShoreNr,roadTime);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 addTimeElapsedBehaviour();
             }
 
@@ -120,7 +133,7 @@ public class FerryAgent extends Agent {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.setConversationId("Vehicles Order");
         String content = "Vehicle count: " + event.VehicleCount + "\n" +
-                "Time to start: " + event.StartVehicleTime;
+                "Time to start: " + event.StartTime;
         msg.setContent(content);
         msg.addReceiver(event.Demander);
         System.out.println(getAID().getName() + ": Send Vehicles Order Response to " + event.Demander.getLocalName());
@@ -130,8 +143,26 @@ public class FerryAgent extends Agent {
     private void addTimeElapsedBehaviour() {
         addBehaviour(new TickerBehaviour(this, 1000) {
             @Override
-            public void onTick() {
+            public void onTick()  {
                 time++;
+                while(bestScenario.size()>0 && bestScenario.getFirst().StartTime==time){
+                    Event ev=bestScenario.removeFirst();
+                    if (ev instanceof HandleRequestEvent) {
+                        HandleRequestEvent vehicleEvent=((HandleRequestEvent) ev);
+                        //Utilities.startSimulationTruck(/*trzeba dodac dane odnosnie poczatku i konca przez pierwsza wiadomosc*/);
+                    }
+                    else if(ev instanceof StartEvent){
+                        StartEvent ferryEvent=((StartEvent) ev);
+                        try {
+                            Utilities.startSimulationFerry(ferryEvent.ShoreNr,roadTime);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 switch (state) {
                     case SHORE_1:
                         if (agentScenario.size() > 0) {
@@ -163,6 +194,7 @@ public class FerryAgent extends Agent {
                 System.out.println(getAID().getName() + ": Actual time is " + time);
                 System.out.println(getAID().getName() + ": My location index is " + positionIndex);
                 System.out.println(getAID().getName() + ": My state is " + state);
+                //TODO: mamy w zasadzie 4 shore'y (patrz mapa)
             }
         });
 
@@ -171,7 +203,7 @@ public class FerryAgent extends Agent {
 
     //region Scenario calculations
 
-    private void CalculateScenario() throws URISyntaxException, InterruptedException {
+    private void CalculateScenario() {
 
         //TO CORRECT!!
         int startShoreNr = 2;
@@ -179,14 +211,17 @@ public class FerryAgent extends Agent {
         RealizeScenario(0, startShoreNr, coast1Requests, coast2Requests, events);
 
         //here we have in bestValue and bestScenario the best solution
+        bestScenario.sort(new Comparator<Event>()
+                          {public int compare(Event o1, Event o2)
+                              { return o1.StartTime-o2.StartTime;
+                              }
+                          });
         System.out.println(getAID().getName() + ": Scenario description:");
         for (Event e : bestScenario) {
             if (e instanceof StartEvent) {
                 StartEvent startEvent = ((StartEvent) e);
                 agentScenario.add(startEvent);
                 System.out.println(getAID().getName() + ": Ferry start at " + startEvent.StartTime + " from coast " + startEvent.ShoreNr);
-                //TODO: mamy w zasadzie 4 shore'y (patrz mapa)
-                Utilities.startSimulationFerry(startEvent.ShoreNr);
             }
         }
     }
@@ -235,7 +270,7 @@ public class FerryAgent extends Agent {
                 //scenario 2: we wait for next transport vehicles
                 int delayTime = firstDemand.getTrackTime() - actualTime;
                 for (HandleRequestEvent event : newEvents) {
-                    event.StartVehicleTime += delayTime;
+                    event.StartTime += delayTime;
                     event.HandleTime += delayTime;
                 }
                 actualTime += delayTime;
