@@ -39,10 +39,15 @@ function initialize(){
     
 	connection.onmessage = function (e) {
 		var obj = JSON.parse(e.data);
+		console.log(obj.type);
+		if (obj.type=="WAREHOUSE"){
+			addMarker(new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']), obj.type);
+		} else {
 		var markstart = new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']);
 		var markend = new google.maps.LatLng(obj['end']['lat'],obj['end']['lng']);
 		setRoute(markstart,markend, obj.type);
 		clients=clients+1;
+		}
 	}
 }
  function addMarker(markerPosition, type) {
@@ -53,6 +58,8 @@ function initialize(){
 	  }
 	  else if (type == "TRUCK"){
 		  ico = "truck.png"
+	  } else if (type == "WAREHOUSE"){
+		  ico = "warehouse.png"
 	  }
       var marker = new google.maps.Marker({
         position: markerPosition,

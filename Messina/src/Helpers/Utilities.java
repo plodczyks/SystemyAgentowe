@@ -22,9 +22,9 @@ public class Utilities {
             System.out.println("not connected");
         }
         if (2 == shoreNr)
-            sender.sendMessage((new Message(coast1Left, coast1Right, VehicleType.FERRY)).toString());
+            sender.sendMessage((new Message(coast1Left, coast1Right, IconType.FERRY)).toString());
         else
-            sender.sendMessage((new Message(coast1Right, coast1Left, VehicleType.FERRY).toString()));
+            sender.sendMessage((new Message(coast1Right, coast1Left, IconType.FERRY).toString()));
     }
     public static void startSimulationTruck(Point from, Point to) throws URISyntaxException, InterruptedException {
         Sender sender = new Sender(new URI("ws://localhost:8888"));
@@ -33,6 +33,15 @@ public class Utilities {
             Thread.sleep(500);
             System.out.println("not connected");
         }
-        sender.sendMessage((new Message(from, to, VehicleType.TRUCK)).toString());
+        sender.sendMessage((new Message(from, to, IconType.TRUCK)).toString());
+    }
+    public static void addWarehouseMarker(Point Location) throws URISyntaxException, InterruptedException {
+        Sender sender = new Sender(new URI("ws://localhost:8888"));
+        sender.connect();
+        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
+            Thread.sleep(500);
+            System.out.println("not connected");
+        }
+        sender.sendMessage(new Message(Location, null, IconType.WAREHOUSE).toString());
     }
 }
