@@ -64,7 +64,7 @@ function initialize(){
       var marker = new google.maps.Marker({
         position: markerPosition,
         map:map,
-        title:"test",
+        title:type,
 		icon: ico
       });
 	 return marker;
