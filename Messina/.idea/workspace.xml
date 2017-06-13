@@ -22,42 +22,81 @@
       <file leaf-file-name="WarehouseAgent.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Agents/WarehouseAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="118" column="25" lean-forward="true" selection-start-line="118" selection-start-column="25" selection-end-line="118" selection-end-column="25" />
+            <state relative-caret-position="1836">
+              <caret line="123" column="5" lean-forward="false" selection-start-line="25" selection-start-column="4" selection-end-line="123" selection-end-column="5" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FerryAgent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Agents/FerryAgent.java">
+      <file leaf-file-name="ShipAgent.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Agents/ShipAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="78" column="48" lean-forward="true" selection-start-line="78" selection-start-column="48" selection-end-line="78" selection-end-column="48" />
+            <state relative-caret-position="136">
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
-                <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
-                <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
-                <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
-                <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
-                <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
-                <element signature="e#14954#14971#0" expanded="false" />
+                <element signature="e#1378#1379#0" expanded="true" />
+                <element signature="e#1429#1430#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HandleRequestEvent.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Helpers/HandleRequestEvent.java">
+      <file leaf-file-name="FerryAgent.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Agents/FerryAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="16" lean-forward="false" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+            <state relative-caret-position="204">
+              <caret line="235" column="0" lean-forward="true" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#RealizeAnimationStep#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#addStraitOrderBehaviour#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
+                <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
+                <element signature="e#14947#14964#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Utilities.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Helpers/Utilities.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="714">
+              <caret line="45" column="9" lean-forward="false" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HandleRequestEvent.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Helpers/HandleRequestEvent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="21" column="11" lean-forward="false" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GuiAgentWindow.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Agents/GuiAgentWindow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1496">
+              <caret line="98" column="81" lean-forward="false" selection-start-line="98" selection-start-column="81" selection-end-line="98" selection-end-column="81" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -111,7 +150,6 @@
         <option value="$PROJECT_DIR$/src/WarehouseAgent.java" />
         <option value="$PROJECT_DIR$/src/FerryAgent.java" />
         <option value="$PROJECT_DIR$/src/Agents/MapAgent.java" />
-        <option value="$PROJECT_DIR$/src/Agents/ShipAgent.java" />
         <option value="$PROJECT_DIR$/src/Agents/GuiAgentWindow.java" />
         <option value="$PROJECT_DIR$/src/Helpers/FerryState.java" />
         <option value="$PROJECT_DIR$/src/Helpers/WarehouseRequestComparator.java" />
@@ -125,10 +163,11 @@
         <option value="$PROJECT_DIR$/src/Helpers/StartEvent.java" />
         <option value="$PROJECT_DIR$/src/Helpers/MessageType.java" />
         <option value="$PROJECT_DIR$/src/Helpers/IconType.java" />
-        <option value="$PROJECT_DIR$/src/Helpers/Utilities.java" />
         <option value="$PROJECT_DIR$/src/Agents/WarehouseAgent.java" />
         <option value="$PROJECT_DIR$/src/Helpers/HandleRequestEvent.java" />
         <option value="$PROJECT_DIR$/src/Helpers/WarehouseRequest.java" />
+        <option value="$PROJECT_DIR$/src/Helpers/Utilities.java" />
+        <option value="$PROJECT_DIR$/src/Agents/ShipAgent.java" />
         <option value="$PROJECT_DIR$/src/Agents/FerryAgent.java" />
       </list>
     </option>
@@ -160,6 +199,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -248,9 +289,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -674,7 +713,7 @@
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="-gui -agents &quot;Ferry1:Agents.FerryAgent(38.210375,15.561670,38.222810,15.632982,11);Warehouse1:Agents.WarehouseAgent(38.151729,15.529505,38.210375,15.561670,3,56,7);Warehouse2:Agents.WarehouseAgent(38.209493,15.514104,38.210375,15.561670,8,50,6);Warehouse3:Agents.WarehouseAgent(38.250155, 15.589844,38.210375,15.561670,11,44,7);Warehouse4:Agents.WarehouseAgent(38.211311,15.691547,38.222810,15.632982,9,23,9);Warehouse5:Agents.WarehouseAgent(38.116347,15.649820,38.222810,15.632982,3,20,2);Warehouse6:Agents.WarehouseAgent( 38.257003,15.752489,38.222810,15.632982,7,32,12)&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="-gui -agents &quot;Ferry1:Agents.FerryAgent(38.210375,15.561670,38.222810,15.632982,11);Warehouse1:Agents.WarehouseAgent(38.151729,15.529505,38.210375,15.561670,3,56,7);Warehouse2:Agents.WarehouseAgent(38.209493,15.514104,38.210375,15.561670,8,50,6);Warehouse3:Agents.WarehouseAgent(38.250155, 15.589844,38.210375,15.561670,11,44,7);Warehouse4:Agents.WarehouseAgent(38.211311,15.691547,38.222810,15.632982,9,23,9);Warehouse5:Agents.WarehouseAgent(38.116347,15.649820,38.222810,15.632982,3,20,2);Warehouse6:Agents.WarehouseAgent( 38.257003,15.752489,38.222810,15.632982,7,32,12);Ship1:Agents.ShipAgent(38.181435,15.592607,38.227809, 15.616367,19)&quot;" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -692,6 +731,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c6eb52c2-4936-4632-8ac8-7ea46e22d496" name="Default" comment="" />
@@ -705,28 +747,28 @@
       <workItem from="1497293389308" duration="2551000" />
       <workItem from="1497296805761" duration="289000" />
       <workItem from="1497297133984" duration="105000" />
-      <workItem from="1497299685218" duration="2756000" />
+      <workItem from="1497299685218" duration="5342000" />
+      <workItem from="1497337996723" duration="159000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32878000" />
+    <option name="totallyTimeSpent" value="35623000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32755905" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2992126" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2992126" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -743,6 +785,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32755905" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -758,7 +801,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Agents/FerryAgent.java</url>
-          <line>143</line>
+          <line>119</line>
           <properties />
           <option name="timeStamp" value="13" />
         </line-breakpoint>
@@ -769,7 +812,7 @@
           <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="21" />
+      <option name="time" value="22" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -846,6 +889,7 @@
         <state relative-caret-position="986">
           <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -881,10 +925,12 @@
             <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#RealizeAnimationStep#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#addStraitOrderBehaviour#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
-            <element signature="e#14954#14971#0" expanded="false" />
+            <element signature="e#14947#14964#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -894,6 +940,7 @@
         <state relative-caret-position="646">
           <caret line="38" column="43" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -925,10 +972,12 @@
             <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#RealizeAnimationStep#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#addStraitOrderBehaviour#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
-            <element signature="e#14954#14971#0" expanded="false" />
+            <element signature="e#14947#14964#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -938,6 +987,7 @@
         <state relative-caret-position="527">
           <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -959,6 +1009,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -973,23 +1024,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Helpers/Locations.java" />
-    <entry file="file://$PROJECT_DIR$/src/Agents/GuiAgentWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="98" column="81" lean-forward="false" selection-start-line="98" selection-start-column="81" selection-end-line="98" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Agents/MapAgent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Agents/ShipAgent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
@@ -1007,6 +1044,7 @@
         <state relative-caret-position="524">
           <caret line="93" column="45" lean-forward="true" selection-start-line="93" selection-start-column="45" selection-end-line="93" selection-end-column="45" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -1049,10 +1087,12 @@
             <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#RealizeAnimationStep#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#addStraitOrderBehaviour#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
-            <element signature="e#14954#14971#0" expanded="false" />
+            <element signature="e#14947#14964#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1125,6 +1165,7 @@
         <state relative-caret-position="164">
           <caret line="98" column="31" lean-forward="true" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
           </folding>
         </state>
@@ -1135,16 +1176,6 @@
         <state relative-caret-position="425">
           <caret line="29" column="9" lean-forward="true" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Helpers/Utilities.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="30" column="25" lean-forward="false" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1164,39 +1195,72 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Helpers/HandleRequestEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="21" column="11" lean-forward="false" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Agents/GuiAgentWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1496">
+          <caret line="98" column="81" lean-forward="false" selection-start-line="98" selection-start-column="81" selection-end-line="98" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Agents/WarehouseAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="118" column="25" lean-forward="true" selection-start-line="118" selection-start-column="25" selection-end-line="118" selection-end-column="25" />
+        <state relative-caret-position="1836">
+          <caret line="123" column="5" lean-forward="false" selection-start-line="25" selection-start-column="4" selection-end-line="123" selection-end-column="5" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#SendVehiclesOrder#0;class#WarehouseAgent#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Helpers/Utilities.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="45" column="9" lean-forward="false" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Agents/ShipAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1378#1379#0" expanded="true" />
+            <element signature="e#1429#1430#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Agents/FerryAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="78" column="48" lean-forward="true" selection-start-line="78" selection-start-column="48" selection-end-line="78" selection-end-column="48" />
+        <state relative-caret-position="204">
+          <caret line="235" column="0" lean-forward="true" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#HandleVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ResponseForVehiclesOrder#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#addTimeElapsedBehaviour#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#RealizeAnimationStep#0;class#FerryAgent#0" expanded="false" />
+            <element signature="method#addStraitOrderBehaviour#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#CalculateScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#RealizeScenario#0;class#FerryAgent#0" expanded="false" />
             <element signature="method#ExtendScenario#0;class#FerryAgent#0" expanded="false" />
-            <element signature="e#14954#14971#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Helpers/HandleRequestEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="12" column="16" lean-forward="false" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#14947#14964#0" expanded="false" />
           </folding>
         </state>
       </provider>

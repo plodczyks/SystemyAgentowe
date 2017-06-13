@@ -36,6 +36,16 @@ public class Utilities {
         }
         sender.sendMessage((new Message(from, to, IconType.TRUCK,roadTime)).toString());
     }
+
+    public static void startSimulationShip(Point from, Point to,int roadTime) throws URISyntaxException, InterruptedException {
+        Sender sender = new Sender(new URI("ws://localhost:8888"));
+        sender.connect();
+        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
+            Thread.sleep(500);
+            System.out.println("not connected");
+        }
+        sender.sendMessage((new Message(from, to, IconType.SHIP,roadTime)).toString());
+    }
 	
     public static void addWarehouseMarker(Point Location) throws URISyntaxException, InterruptedException {
         Sender sender = new Sender(new URI("ws://localhost:8888"));

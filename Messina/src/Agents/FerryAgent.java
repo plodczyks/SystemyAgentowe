@@ -76,34 +76,10 @@ public class FerryAgent extends Agent {
                 System.out.println(getAID().getName() + ": Actual time is " + time);
                 System.out.println(getAID().getName() + ": My location index is " + positionIndex);
                 System.out.println(getAID().getName() + ": My state is " + state);
-                while(bestScenario.size()>0 && bestScenario.getFirst().StartTime==time){
-                    Event ev=bestScenario.removeFirst();
-                    if (ev instanceof HandleRequestEvent) {
-                        HandleRequestEvent vehicleEvent=((HandleRequestEvent) ev);
-                        try {
-                            Utilities.startSimulationTruck(vehicleEvent.Location,vehicleEvent.CoastLocation,vehicleEvent.RoadTime);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else if(ev instanceof StartEvent){
-                        StartEvent ferryEvent=((StartEvent) ev);
-                        try {
-                            Utilities.startSimulationFerry(ferryEvent.ShoreNr,roadTime);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
+                RealizeAnimationStep();
                 addTimeElapsedBehaviour();
+                addStraitOrderBehaviour();
             }
-
-
         });
 //
 //
@@ -151,35 +127,14 @@ public class FerryAgent extends Agent {
         send(msg);
     }
 
+    //region animation & ferry logic behaviour
+
     private void addTimeElapsedBehaviour() {
         addBehaviour(new TickerBehaviour(this, 1000) {
             @Override
             public void onTick()  {
                 time++;
-                while(bestScenario.size()>0 && bestScenario.getFirst().StartTime==time){
-                    Event ev=bestScenario.removeFirst();
-                    if (ev instanceof HandleRequestEvent) {
-                        HandleRequestEvent vehicleEvent=((HandleRequestEvent) ev);
-                        try {
-                            Utilities.startSimulationTruck(vehicleEvent.Location,vehicleEvent.CoastLocation,vehicleEvent.RoadTime);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else if(ev instanceof StartEvent){
-                        StartEvent ferryEvent=((StartEvent) ev);
-                        try {
-                            Utilities.startSimulationFerry(ferryEvent.ShoreNr,roadTime);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
+                RealizeAnimationStep();
                 switch (state) {
                     case SHORE_1:
                         if (agentScenario.size() > 0) {
@@ -218,6 +173,65 @@ public class FerryAgent extends Agent {
 
     }
 
+    private void RealizeAnimationStep(){
+        while(bestScenario.size()>0 && bestScenario.getFirst().StartTime==time){
+            Event ev=bestScenario.removeFirst();
+            if (ev instanceof HandleRequestEvent) {
+                HandleRequestEvent vehicleEvent=((HandleRequestEvent) ev);
+                try {
+                    Utilities.startSimulationTruck(vehicleEvent.Location,vehicleEvent.CoastLocation,vehicleEvent.RoadTime);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(ev instanceof StartEvent){
+                StartEvent ferryEvent=((StartEvent) ev);
+                try {
+                    Utilities.startSimulationFerry(ferryEvent.ShoreNr,roadTime);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    //endregion
+
+    //region ship behaviours
+    private void addStraitOrderBehaviour() {
+        addBehaviour(new CyclicBehaviour(this) {
+            @Override
+            public void action()  {
+                ACLMessage rcv = receive();
+                if (rcv != null) {
+                    if (rcv.getConversationId().contains("Strait Order")) {
+                        HandleStraitOrder(rcv);
+                    }
+                } else {
+                    block();
+                }
+            }
+        });
+    }
+
+    private void HandleStraitOrder(ACLMessage msg) {
+        String[] description = msg.getContent().split("\n");
+
+        int beforeTime = Integer.parseInt(description[0].split(":")[1]);
+        int reservationTime = Integer.parseInt(description[1].split(":")[1]);
+
+//        WarehouseRequest request = new WarehouseRequest(vehicleCount, limitTime, roadTime,warehouseLocation,coastLocation, msg.getSender());
+//        if (shoreNr == 1) coast1Requests.add(request);
+//        else coast2Requests.add(request);
+
+        System.out.println(getAID().getName() + ": Strait Order Request from " + msg.getSender().getLocalName() + " is handling");
+    }
+
+    //endregion
     //region Scenario calculations
 
     private void CalculateScenario() {
