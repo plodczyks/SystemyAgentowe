@@ -10,6 +10,11 @@ var polyline = [];
 var poly2 = [];
 var marker = [];
 var timerHandle = [];
+var factor = [];
+var tick = 20; // milliseconds, frequency of marker update
+var elapsedtime = [];
+var names = [];
+var arrivetime = [];
 function initialize(){
 	
 	directionsDisplay = new Array();
@@ -39,20 +44,20 @@ function initialize(){
     
 	connection.onmessage = function (e) {
 		var obj = JSON.parse(e.data);
-		console.log(obj.type);
 		if (obj.type=="WAREHOUSE"){
 			addMarker(new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']), obj.type);
 		} else {
 		var markstart = new google.maps.LatLng(obj['start']['lat'],obj['start']['lng']);
 		var markend = new google.maps.LatLng(obj['end']['lat'],obj['end']['lng']);
-		setRoute(markstart,markend, obj.type);
+		setRoute(markstart,markend, obj.type, obj.time);
+		arrivetime[clients] = obj.time;
+		names[clients]=obj.type;
 		clients=clients+1;
 		}
 	}
 }
  function addMarker(markerPosition, type) {
 	 var ico;
-	 console.log(type);
 	  if(type=="FERRY"){
 		  ico = "ship.png"
 	  }
@@ -69,7 +74,7 @@ function initialize(){
       });
 	 return marker;
     }
-function setRoute(startLoc, endLoc, type){
+function setRoute(startLoc, endLoc, type, time){
 	
 	var rendererOptions = {
         map: map,
@@ -89,7 +94,7 @@ function setRoute(startLoc, endLoc, type){
 
 	function makeRouteCallback(routeNum,disp){
         if (polyline[routeNum] && (polyline[routeNum].getMap() != null)) {
-         startAnimation(routeNum);
+         startAnimation(routeNum,0);
          return;
         }
         return function(response, status){
@@ -101,7 +106,10 @@ function setRoute(startLoc, endLoc, type){
             startLocation[routeNum] = new Object();
             endLocation[routeNum] = new Object();
 
-
+			var distance = 0;
+			for(var i=0;i<response.routes[0].legs.length;i++)
+				distance+=response.routes[0].legs[i].distance.value;
+			
             polyline[routeNum] = new google.maps.Polyline({
             path: [],
             strokeColor: '#FFFF00',
@@ -149,8 +157,8 @@ function setRoute(startLoc, endLoc, type){
          }       
 
          polyline[routeNum].setMap(map);
+		 factor[routeNum]=parseInt(distance*tick/1000/time);
          startAnimation(routeNum);  
-
     } // else alert("Directions request failed: "+status);
 
   }	
@@ -158,13 +166,12 @@ function setRoute(startLoc, endLoc, type){
 }
     var lastVertex = 1;
     var stepnum=0;
-    var step = 50; // 5; // metres
-    var tick = 100; // milliseconds
     var eol= [];
+	
 //----------------------------------------------------------------------                
  function updatePoly(i,d) {
  // Spawn a new polyline every 20 vertices, because updating a 100-vertex poly is too slow
-    if (poly2[i].getPath().getLength() > 20) {
+    if (poly2[i].getPath().getLength() > 80) {
           poly2[i]=new google.maps.Polyline([polyline[i].getPath().getAt(lastVertex-1)]);
           // map.addOverlay(poly2)
         }
@@ -184,13 +191,13 @@ function animate(index,d) {
    if (d>eol[index]) {
 
       marker[index].setPosition(endLocation[index].latlng);
+	  console.log("finished " + names[index] + " " + index + '\n' + "difference: " + (arrivetime[index] - (performance.now()-elapsedtime[index])/1000) + " s");
       return;
    }
     var p = polyline[index].GetPointAtDistance(d);
-
     marker[index].setPosition(p);
     updatePoly(index,d);
-    timerHandle[index] = setTimeout("animate("+index+","+(d+step)+")", tick);
+    timerHandle[index] = setTimeout("animate("+index+","+(d+factor[index])+")", tick);
 }
 
 //-------------------------------------------------------------------------
@@ -198,9 +205,10 @@ function animate(index,d) {
 function startAnimation(index) {
         if (timerHandle[index]) clearTimeout(timerHandle[index]);
         eol[index]=polyline[index].Distance();
-        map.setCenter(polyline[index].getPath().getAt(0));
+        //map.setCenter(polyline[index].getPath().getAt(0));
 
         poly2[index] = new google.maps.Polyline({path: [polyline[index].getPath().getAt(0)], strokeColor:"#FFFF00", strokeWeight:3});
-
-        timerHandle[index] = setTimeout("animate("+index+",50)",2000);  // Allow time for the initial map display
+        timerHandle[index] = setTimeout("animate("+index+","+factor[index]+")",tick);  // Allow time for the initial map display
+		elapsedtime[index]=performance.now();
+		
 }
