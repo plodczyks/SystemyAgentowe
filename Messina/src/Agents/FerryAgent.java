@@ -93,7 +93,7 @@ public class FerryAgent extends Agent {
 
         double warehouseLatitude = Double.parseDouble((description[0].split(":")[1]).split(",")[0].trim());
         double warehouseLongitude = Double.parseDouble((description[0].split(":")[1]).split(",")[1].trim());
-        Point warehouseLocation=new Point(warehouseLatitude,warehouseLongitude);
+        Point warehouseLocation = new Point(warehouseLatitude, warehouseLongitude);
 
         int shoreNr = 2;
         double latitude = Double.parseDouble((description[1].split(":")[1]).split(",")[0].trim());
@@ -101,7 +101,7 @@ public class FerryAgent extends Agent {
         if (coast1Location.lat == latitude && coast1Location.lng == longitude) {
             shoreNr = 1;
         }
-        Point coastLocation=new Point(latitude,longitude);
+        Point coastLocation = new Point(latitude, longitude);
 
         int roadTime = Integer.parseInt((description[2].split(":")[1]).trim());
 
@@ -109,7 +109,7 @@ public class FerryAgent extends Agent {
 
         int vehicleCount = Integer.parseInt((description[4].split(":")[1]).trim());
 
-        WarehouseRequest request = new WarehouseRequest(vehicleCount, limitTime, roadTime,warehouseLocation,coastLocation, msg.getSender());
+        WarehouseRequest request = new WarehouseRequest(vehicleCount, limitTime, roadTime, warehouseLocation, coastLocation, msg.getSender());
         if (shoreNr == 1) coast1Requests.add(request);
         else coast2Requests.add(request);
 
@@ -132,7 +132,7 @@ public class FerryAgent extends Agent {
     private void addTimeElapsedBehaviour() {
         addBehaviour(new TickerBehaviour(this, 1000) {
             @Override
-            public void onTick()  {
+            public void onTick() {
                 time++;
                 RealizeAnimationStep();
                 switch (state) {
@@ -242,11 +242,11 @@ public class FerryAgent extends Agent {
         RealizeScenario(0, startShoreNr, coast1Requests, coast2Requests, events);
 
         //here we have in bestValue and bestScenario the best solution
-        bestScenario.sort(new Comparator<Event>()
-                          {public int compare(Event o1, Event o2)
-                              { return o1.StartTime-o2.StartTime;
-                              }
-                          });
+        bestScenario.sort(new Comparator<Event>() {
+            public int compare(Event o1, Event o2) {
+                return o1.StartTime - o2.StartTime;
+            }
+        });
         System.out.println(getAID().getName() + ": Scenario description:");
         for (Event e : bestScenario) {
             if (e instanceof StartEvent) {
@@ -287,11 +287,11 @@ public class FerryAgent extends Agent {
 
                 if (vehicleToHandle <= CAPACITY - actualCapacity) {
                     actualDemands.removeFirst();
-                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, vehicleToHandle, startVehicleTime,firstDemand.getWarehouseLocation(),firstDemand.getCoastLocation(),firstDemand.getTrackTime(), firstDemand.getDemander()));
+                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, vehicleToHandle, startVehicleTime, firstDemand.getWarehouseLocation(), firstDemand.getCoastLocation(), firstDemand.getTrackTime(), firstDemand.getDemander()));
                     actualCapacity += vehicleToHandle;
                 } else {
                     firstDemand.setVehicleCount(vehicleToHandle - (CAPACITY - actualCapacity));
-                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, CAPACITY - actualCapacity, startVehicleTime,firstDemand.getWarehouseLocation(),firstDemand.getCoastLocation(),firstDemand.getTrackTime(), firstDemand.getDemander()));
+                    newEvents.add(new HandleRequestEvent(limitTime, actualTime + 1 + roadTime + 1, CAPACITY - actualCapacity, startVehicleTime, firstDemand.getWarehouseLocation(), firstDemand.getCoastLocation(), firstDemand.getTrackTime(), firstDemand.getDemander()));
                     actualCapacity = CAPACITY;
                 }
             } else {
@@ -338,7 +338,7 @@ public class FerryAgent extends Agent {
     private LinkedList<WarehouseRequest> CreateDeepCopy(LinkedList<WarehouseRequest> requests) {
         LinkedList<WarehouseRequest> result = new LinkedList<>();
         for (WarehouseRequest e : requests) {
-            result.add(new WarehouseRequest(e.getVehicleCount(), e.getLimitTime(), e.getTrackTime(),e.getWarehouseLocation(),e.getCoastLocation(), e.getDemander()));
+            result.add(new WarehouseRequest(e.getVehicleCount(), e.getLimitTime(), e.getTrackTime(), e.getWarehouseLocation(), e.getCoastLocation(), e.getDemander()));
         }
         return result;
     }
