@@ -59,12 +59,13 @@ function initialize(){
  function addMarker(markerPosition, type) {
 	 var ico;
 	  if(type=="FERRY"){
-		  ico = "ship.png"
-	  }
-	  else if (type == "TRUCK"){
+		  ico = "ferry.png"
+	  } else if (type == "TRUCK"){
 		  ico = "truck.png"
 	  } else if (type == "WAREHOUSE"){
 		  ico = "warehouse.png"
+	  } else if (type == "SHIP"){
+		  ico = "ship.png"
 	  }
       var marker = new google.maps.Marker({
         position: markerPosition,
@@ -191,6 +192,7 @@ function animate(index,d) {
    if (d>eol[index]) {
 
       marker[index].setPosition(endLocation[index].latlng);
+	  marker[index].setMap(null);
 	  console.log("finished " + names[index] + " " + index + '\n' + "difference: " + (arrivetime[index] - (performance.now()-elapsedtime[index])/1000) + " s");
       return;
    }
