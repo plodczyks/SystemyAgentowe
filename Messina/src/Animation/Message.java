@@ -1,5 +1,7 @@
-package Helpers;
+package Animation;
 
+import Helpers.IconType;
+import Helpers.Point;
 import com.google.gson.Gson;
 
 public class Message {
@@ -7,9 +9,9 @@ public class Message {
     private Point end;
     private int time;
 	private IconType type;
-    public Message(double lattitude1, double longtitude1, double lattitude2, double longtitude2, IconType type,int time){
-        start = new Point(lattitude1,longtitude1);
-        end = new Point(lattitude2, longtitude2);
+    public Message(double latitude1, double longitude1, double latitude2, double longitude2, IconType type,int time){
+        start = new Point(latitude1,longitude1);
+        end = new Point(latitude2, longitude2);
         this.type = type;
         this.time=time;
     }

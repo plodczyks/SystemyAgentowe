@@ -1,13 +1,11 @@
-package Helpers;
-
-import Helpers.Event;
+package Events;
 
 /**
  * Created by Sławek on 2017-06-10.
  */
-public class StartEvent extends Event {
+public class FerryStartEvent extends StartEvent {
 
-    public StartEvent(int shoreNr,int startTime){
+    public FerryStartEvent(int shoreNr, int startTime){
         super(startTime);
         this.ShoreNr=shoreNr;
     }

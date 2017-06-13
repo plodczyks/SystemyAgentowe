@@ -1,18 +1,13 @@
 package Agents;
 
 import Helpers.Point;
-import Helpers.Sender;
-import Helpers.Utilities;
+import Animation.Sender;
+import Animation.Utilities;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
-import jade.wrapper.StaleProxyException;
 
-import javax.swing.*;
 import java.net.URISyntaxException;
 
 
@@ -21,21 +16,20 @@ import java.net.URISyntaxException;
 
 
 public class ShipAgent extends Agent {
+    //to correct
+    private String ferryName="Ferry1";
 
     //road parameters
-    private Point fromLocation;
-    private Point toLocation;
+    private Point fromLocation=new Point(38.181435, 15.592607);
+    private Point toLocation=new Point(38.227809, 15.616367);
 
-    //request parameters
-    private int wakeTime=19;
+    //strait order request parameters
+    private int wakeTime;
     private int reserveTime=5;
     private int beforeTime=10;
 
-    //to correct
-    String ferryName="Ferry1";
-
     //for animation
-    Sender animationSender;
+    private Sender animationSender;
 
 
     protected void setup(){
@@ -47,12 +41,18 @@ public class ShipAgent extends Agent {
             e.printStackTrace();
         }
         Object[] args=getArguments();
-        fromLocation=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
-        toLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
-        wakeTime=Integer.parseInt((String)args[4]);
+       // fromLocation=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
+       // toLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
+        wakeTime=Integer.parseInt((String)args[0]);
        // reserveTime=Integer.parseInt((String)args[5]);
        // beforeTime=Integer.parseInt((String)args[6]);
 
+        addSendStraitOrderBehaviour();
+    }
+
+    //region Strait Order Request
+
+    private void addSendStraitOrderBehaviour(){
         addBehaviour(new WakerBehaviour(this,wakeTime*1000){
             private static final long serialVersionUID = 1L;
             @Override
@@ -83,34 +83,5 @@ public class ShipAgent extends Agent {
         }
     }
 
-//    public void HandleResponseForVehiclesOrder(ACLMessage msg){
-//
-//        String[] description=msg.getContent().split("\n");
-//        int handledVehicleCount=Integer.parseInt((description[0].split(":")[1]).trim());
-//        int timeToStart=Integer.parseInt((description[1].split(":")[1]).trim());
-//
-//        vehicleCount-=handledVehicleCount;
-//        if(handledVehicleCount>0){
-//            addBehaviour(new WakerBehaviour(this,timeToStart*1000){
-//                private static final long serialVersionUID = 1L;
-//                @Override
-//                protected void onWake() {
-//                    for(int i=0;i<handledVehicleCount;i++){
-//                        ContainerController cc = getContainerController();
-//                        AgentController ac;
-//                        try {
-//                            ac = cc.createNewAgent(getLocalName()+"TransportVehicle"+transportVehicleIndex, "Agents.TransportVehicleAgent",
-//                                    new Object[]{location.lat,location.lng,coastLocation.lat,coastLocation.lng,roadTime});
-//                            ac.start();
-//                        } catch (StaleProxyException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//                        transportVehicleIndex++;
-//                    }
-//                }
-//            });
-//        }
-//        System.out.println(getAID().getName() +": Handle Vehicles Order Response from "+msg.getSender().getLocalName());
-//    }
+    //endregion
 }

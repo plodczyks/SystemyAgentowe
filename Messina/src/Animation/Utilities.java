@@ -1,5 +1,9 @@
-package Helpers;
+package Animation;
 
+import Animation.Message;
+import Animation.Sender;
+import Helpers.IconType;
+import Helpers.Point;
 import org.java_websocket.WebSocket;
 
 import java.net.URI;

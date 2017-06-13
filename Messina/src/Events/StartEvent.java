@@ -1,15 +1,15 @@
-package Helpers;
+package Events;
 
 import java.util.LinkedList;
 
 /**
  * Created by Sławek on 2017-06-10.
  */
-public class Event {
+public class StartEvent {
 
     public int StartTime;
 
-    public Event(int startTime) {
+    public StartEvent(int startTime) {
         this.StartTime = startTime;
     }
 }

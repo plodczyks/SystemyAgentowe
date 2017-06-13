@@ -1,4 +1,4 @@
-package Helpers;
+package Animation;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;

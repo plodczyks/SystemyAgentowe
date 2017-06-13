@@ -1,6 +1,6 @@
-package Helpers;
+package Requests;
 
-import Helpers.WarehouseRequest;
+import Requests.WarehouseRequest;
 
 import java.util.Comparator;
 
@@ -17,11 +17,11 @@ public class WarehouseRequestComparator implements Comparator<WarehouseRequest> 
 
     @Override
     public int compare(WarehouseRequest o1, WarehouseRequest o2) {
-        if(o1.getTrackTime()>actualTime){
+        if(o1.TrackTime>actualTime){
             //o1 nie zdazy na czas dojechac
-            if(o2.getTrackTime()>actualTime){
+            if(o2.TrackTime>actualTime){
                 //o2 nie zdazy na czas dojechac
-                return o1.getTrackTime()-o2.getTrackTime();
+                return o1.TrackTime-o2.TrackTime;
             }
             else{
                 //o2 zdazy na czas dojechac
@@ -30,13 +30,13 @@ public class WarehouseRequestComparator implements Comparator<WarehouseRequest> 
         }
         else{
             //o1 zdazy na czas dojechac
-            if(o2.getTrackTime()>actualTime){
+            if(o2.TrackTime>actualTime){
                 //o2 nie zdazy na czas dojechac
                 return -1;
             }
             else{
                 //o2 zdazy na czas dojechac
-                return o1.getLimitTime()-o2.getLimitTime();
+                return o1.LimitTime-o2.LimitTime;
             }
         }
     }

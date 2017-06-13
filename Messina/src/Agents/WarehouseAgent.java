@@ -1,10 +1,11 @@
 package Agents;
 
+import Animation.Sender;
+import Animation.Utilities;
 import Helpers.*;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
@@ -40,12 +41,12 @@ public class WarehouseAgent extends Agent {
     private LinkedList<Integer> vehicleCounts = new LinkedList<>();
     private LinkedList<Integer> startTimes = new LinkedList<>();
 
-    //actual time
-    private int time = 0;
-
     //helpers
     private int transportVehicleIndex = 1;
     private boolean tickerStarted = false;
+
+    //time param
+    private int time = 0;
 
     //for animation
     Sender animationSender;
@@ -76,6 +77,10 @@ public class WarehouseAgent extends Agent {
 
         SendVehiclesOrder();
 
+        addHandleMessagesBehaviour();
+    }
+
+    private void addHandleMessagesBehaviour() {
         addBehaviour(new CyclicBehaviour(this) {
             private static final long serialVersionUID = 1L;
 
@@ -83,30 +88,14 @@ public class WarehouseAgent extends Agent {
             public void action() {
                 ACLMessage rcv = receive();
                 if (rcv != null) {
-                    if (rcv.getConversationId().contains("Vehicles Order")) {
-                        HandleResponseForVehiclesOrder(rcv);
-                    } else if (rcv.getConversationId().contains("Vehicles Cancel")) {
-                        HandleVehiclesCancel(rcv);
-                    }
-                } else {
-                    block();
-                }
+                    if (rcv.getConversationId().contains("Vehicles Order")) HandleResponseForVehiclesOrder(rcv);
+                    else if (rcv.getConversationId().contains("Vehicles Cancel")) HandleVehiclesCancel(rcv);
+                } else block();
             }
         });
     }
 
-    //region Vehicles Cancel
-
-    private void HandleVehiclesCancel(ACLMessage rcv) {
-
-        vehicleCounts.clear();
-        startTimes.clear();
-        //System.out.println(getAID().getName() +": Handle Vehicles Order Response from "+msg.getSender().getLocalName());
-    }
-
-    //endregion
-
-    //region Vehicles Order
+    //region Vehicles Order Request
 
     public void SendVehiclesOrder() {
 
@@ -125,6 +114,10 @@ public class WarehouseAgent extends Agent {
         send(msg);
     }
 
+    //endregion
+
+    //region Vehicles Order Response
+
     public void HandleResponseForVehiclesOrder(ACLMessage msg) {
 
         String[] description = msg.getContent().split("\n");
@@ -133,25 +126,62 @@ public class WarehouseAgent extends Agent {
         vehicleCounts.add(handledVehicleCount);
         startTimes.add(timeToStart);
         if (!tickerStarted) {
-            addBehaviour(new TickerBehaviour(this, 1000) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void onTick() {
-                    time++;
-                    HandleTickTime();
-                }
-            });
-            tickerStarted = true;
             HandleTickTime();
+            addTickerBahviour();
+            tickerStarted = true;
         }
         System.out.println(getAID().getName() + ": Handle Vehicles Order Response from " + msg.getSender().getLocalName());
+    }
+    //endregion
+
+    //region Vehilces Start Inform
+    public void SendVehiclesStart(int requestVehicleCount) {
+        AID receiver = new AID(ferryName, AID.ISLOCALNAME);
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.setConversationId("Vehicles Start");
+        String content =
+                "Warehouse location: " + location.lat + "," + location.lng + "\n" +
+                        "Coast location: " + coastLocation.lat + "," + coastLocation.lng + "\n" +
+                        "Vehicle count: " + requestVehicleCount + "\n" +
+                        "Vehicles start!";
+        msg.setContent(content);
+        msg.addReceiver(receiver);
+        System.out.println(getAID().getName() + ": Send Vehicles Start Inform to " + receiver.getLocalName());
+        send(msg);
+    }
+    //endregion
+
+    //region Vehicles Cancel Inform
+
+    private void HandleVehiclesCancel(ACLMessage rcv) {
+        vehicleCounts.clear();
+        startTimes.clear();
+        System.out.println(getAID().getName() + ": Handle Vehicles Cancel Inform from " + rcv.getSender().getLocalName());
+    }
+
+    //endregion
+
+    //region ticker handling
+
+    private void addTickerBahviour() {
+        addBehaviour(new TickerBehaviour(this, 1000) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void onTick() {
+                time++;
+                HandleTickTime();
+            }
+        });
     }
 
     private void HandleTickTime() {
         if (startTimes.size() > 0 && startTimes.getFirst() == time) {
             startTimes.removeFirst();
             int requestVehicleCount = vehicleCounts.removeFirst();
+
+            SendVehiclesStart(requestVehicleCount);
+            vehicleCount -= requestVehicleCount;
+
             for (int i = 0; i < requestVehicleCount; i++) {
                 ContainerController cc = getContainerController();
                 AgentController ac;
@@ -165,7 +195,8 @@ public class WarehouseAgent extends Agent {
                 }
                 transportVehicleIndex++;
             }
-            vehicleCount -= requestVehicleCount;
+
+            //animation
             try {
                 Utilities.startSimulationTruck(animationSender,location, coastLocation, roadTime);
             } catch (URISyntaxException e) {
