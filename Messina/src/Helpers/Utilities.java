@@ -14,46 +14,45 @@ public class Utilities {
     public static final Point coast1Right = new Point(38.222881, 15.632940);
     //public static final Point coast2Right = new Point(38.221144, 15.632822);
 
-    public static void startSimulationFerry(int shoreNr,int roadTime) throws URISyntaxException, InterruptedException {
+    public static Sender getConnectedSender() throws URISyntaxException, InterruptedException {
         Sender sender = new Sender(new URI("ws://localhost:8888"));
         sender.connect();
         while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
-            Thread.sleep(500);
-            System.out.println("not connected");
+            Thread.sleep(100);
+            //System.out.println("not connected");
         }
+        return sender;
+    }
+
+
+    public static void startSimulationFerry(Sender sender,int shoreNr,int roadTime) throws URISyntaxException, InterruptedException {
         if (1 == shoreNr)
             sender.sendMessage((new Message(coast1Left, coast1Right, IconType.FERRY,roadTime)).toString());
         else
             sender.sendMessage((new Message(coast1Right, coast1Left, IconType.FERRY,roadTime)).toString());
     }
 	
-    public static void startSimulationTruck(Point from, Point to,int roadTime) throws URISyntaxException, InterruptedException {
-        Sender sender = new Sender(new URI("ws://localhost:8888"));
-        sender.connect();
-        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
-            Thread.sleep(500);
-            System.out.println("not connected");
-        }
+    public static void startSimulationTruck(Sender sender,Point from, Point to,int roadTime) throws URISyntaxException, InterruptedException {
+//        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
+//            Thread.sleep(500);
+//            System.out.println("not connected");
+//        }
         sender.sendMessage((new Message(from, to, IconType.TRUCK,roadTime)).toString());
     }
 
-    public static void startSimulationShip(Point from, Point to,int roadTime) throws URISyntaxException, InterruptedException {
-        Sender sender = new Sender(new URI("ws://localhost:8888"));
-        sender.connect();
-        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
-            Thread.sleep(500);
-            System.out.println("not connected");
-        }
+    public static void startSimulationShip(Sender sender,Point from, Point to,int roadTime) throws URISyntaxException, InterruptedException {
+//        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
+//            Thread.sleep(500);
+//            System.out.println("not connected");
+//        }
         sender.sendMessage((new Message(from, to, IconType.SHIP,roadTime)).toString());
     }
 	
-    public static void addWarehouseMarker(Point Location) throws URISyntaxException, InterruptedException {
-        Sender sender = new Sender(new URI("ws://localhost:8888"));
-        sender.connect();
-        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
-            Thread.sleep(500);
-            System.out.println("not connected");
-        }
+    public static void addWarehouseMarker(Sender sender,Point Location) throws URISyntaxException, InterruptedException {
+//        while (sender.getReadyState() == WebSocket.READYSTATE.NOT_YET_CONNECTED) {
+//            Thread.sleep(500);
+//            System.out.println("not connected");
+//        }
         sender.sendMessage(new Message(Location, null, IconType.WAREHOUSE,0).toString());
     }
 }

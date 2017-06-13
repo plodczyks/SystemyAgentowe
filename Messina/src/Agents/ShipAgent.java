@@ -1,6 +1,7 @@
 package Agents;
 
 import Helpers.Point;
+import Helpers.Sender;
 import Helpers.Utilities;
 import jade.core.AID;
 import jade.core.Agent;
@@ -11,6 +12,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import javax.swing.*;
 import java.net.URISyntaxException;
 
 
@@ -19,6 +21,7 @@ import java.net.URISyntaxException;
 
 
 public class ShipAgent extends Agent {
+
     //road parameters
     private Point fromLocation;
     private Point toLocation;
@@ -31,9 +34,18 @@ public class ShipAgent extends Agent {
     //to correct
     String ferryName="Ferry1";
 
+    //for animation
+    Sender animationSender;
+
 
     protected void setup(){
-
+        try {
+            animationSender= Utilities.getConnectedSender();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Object[] args=getArguments();
         fromLocation=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
         toLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
@@ -63,7 +75,7 @@ public class ShipAgent extends Agent {
         System.out.println(getAID().getName() + ": Send Strait Order Request to " + receiver.getLocalName());
         send(msg);
         try {
-            Utilities.startSimulationShip(fromLocation, toLocation, beforeTime + reserveTime);
+            Utilities.startSimulationShip(animationSender,fromLocation, toLocation, beforeTime + reserveTime);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
