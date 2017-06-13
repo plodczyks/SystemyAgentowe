@@ -219,13 +219,12 @@ public class FerryAgent extends Agent {
     private void HandleStraitOrder(ACLMessage msg) {
         String[] description = msg.getContent().split("\n");
 
-        //hardcoded values
         int beforeTime = Integer.parseInt(description[0].split(":")[1].trim());
         int reservationTime = Integer.parseInt(description[1].split(":")[1].trim());
 
-        int boundaryLeftTime = time + 2;
-        int boundaryRightTime = time + 12;
-        //end hardcoded values
+        int boundaryLeftTime = time - (roadTime -beforeTime)  + 2; //time+beforeTime -roadTime+2
+        int boundaryRightTime = time + beforeTime + reservationTime -2;
+
         for (int i = 0; i < agentScenario.size(); i++) {
             if (boundaryLeftTime <= agentScenario.get(i).StartTime && agentScenario.get(i).StartTime <= boundaryRightTime) {
                 coast1Requests.clear();

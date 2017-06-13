@@ -25,8 +25,8 @@ public class ShipAgent extends Agent {
 
     //strait order request parameters
     private int wakeTime;
-    private int reserveTime=5;
-    private int beforeTime=10;
+    private int beforeTime;
+    private int reserveTime;
 
     //for animation
     private Sender animationSender;
@@ -44,8 +44,8 @@ public class ShipAgent extends Agent {
        // fromLocation=new Point(Double.parseDouble((String)args[0]),Double.parseDouble((String)args[1]));
        // toLocation=new Point(Double.parseDouble((String)args[2]),Double.parseDouble((String)args[3]));
         wakeTime=Integer.parseInt((String)args[0]);
-       // reserveTime=Integer.parseInt((String)args[5]);
-       // beforeTime=Integer.parseInt((String)args[6]);
+        beforeTime=Integer.parseInt((String)args[1]);
+        reserveTime=Integer.parseInt((String)args[2]);
 
         addSendStraitOrderBehaviour();
     }
